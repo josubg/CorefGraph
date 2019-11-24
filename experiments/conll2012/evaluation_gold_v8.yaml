@@ -1,0 +1,10 @@
+language: en_conll
+mention_catchers: [GoldCatcher]
+mention_filters: []
+mention_purges: []
+extractor_options: [probabilistic_gender]
+writer: CONLL
+evaluation_script: ../../conll2012/corpus/scorer/v8.01/launch_scorer.sh
+metrics: [muc, bcub, ceafe, blanc]
+f1_metrics: [muc, bcub, ceafe]
+result: gold

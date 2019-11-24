@@ -1,0 +1,2 @@
+candidate_extractor: breadth_first_per_child_subordinate
+result: CE_BFCS

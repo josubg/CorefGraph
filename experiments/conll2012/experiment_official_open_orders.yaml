@@ -1,0 +1,42 @@
+directory: ../../conll2012/corpus/official/auto/data/english/annotations/
+extension: naf_stanford_sem
+evaluate: True
+report: True
+jobs: 15
+# Common config for all experiments
+common:
+    - experiments/conll2012/corpus_test.yaml
+    - experiments/conll2012/evaluation_predicted_v8.yaml
+    - experiments/sieves/10.yaml
+# experiments
+config:
+    - [experiments/extractors/candidate_bf.yaml, experiments/extractors/mention_bf.yaml]
+    - [experiments/extractors/candidate_bf.yaml, experiments/extractors/mention_bfc.yaml]
+    - [experiments/extractors/candidate_bf.yaml, experiments/extractors/mention_bfs.yaml]
+    - [experiments/extractors/candidate_bf.yaml, experiments/extractors/mention_bfcs.yaml]
+    - [experiments/extractors/candidate_bf.yaml, experiments/extractors/mention_df.yaml]
+
+    - [experiments/extractors/candidate_bfc.yaml, experiments/extractors/mention_bf.yaml]
+    - [experiments/extractors/candidate_bfc.yaml, experiments/extractors/mention_bfc.yaml]
+    - [experiments/extractors/candidate_bfc.yaml, experiments/extractors/mention_bfs.yaml]
+    - [experiments/extractors/candidate_bfc.yaml, experiments/extractors/mention_bfcs.yaml]
+    - [experiments/extractors/candidate_bfc.yaml, experiments/extractors/mention_df.yaml]
+
+    - [experiments/extractors/candidate_bfs.yaml, experiments/extractors/mention_bf.yaml]
+    - [experiments/extractors/candidate_bfs.yaml, experiments/extractors/mention_bfc.yaml]
+    - [experiments/extractors/candidate_bfs.yaml, experiments/extractors/mention_bfs.yaml]
+    - [experiments/extractors/candidate_bfs.yaml, experiments/extractors/mention_bfcs.yaml]
+    - [experiments/extractors/candidate_bfs.yaml, experiments/extractors/mention_df.yaml]
+
+    - [experiments/extractors/candidate_bfcs.yaml, experiments/extractors/mention_bf.yaml]
+    - [experiments/extractors/candidate_bfcs.yaml, experiments/extractors/mention_bfc.yaml]
+    - [experiments/extractors/candidate_bfcs.yaml, experiments/extractors/mention_bfs.yaml]
+    - [experiments/extractors/candidate_bfcs.yaml, experiments/extractors/mention_bfcs.yaml]
+    - [experiments/extractors/candidate_bfcs.yaml, experiments/extractors/mention_df.yaml]
+
+
+    - [experiments/extractors/candidate_df.yaml, experiments/extractors/mention_bf.yaml]
+    - [experiments/extractors/candidate_df.yaml, experiments/extractors/mention_bfc.yaml]
+    - [experiments/extractors/candidate_df.yaml, experiments/extractors/mention_bfs.yaml]
+    - [experiments/extractors/candidate_df.yaml, experiments/extractors/mention_bfcs.yaml]
+    - [experiments/extractors/candidate_df.yaml, experiments/extractors/mention_df.yaml]

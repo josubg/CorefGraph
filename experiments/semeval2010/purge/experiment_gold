@@ -1,0 +1,14 @@
+--directories
+../../semeval2010/task01.posttask.v1.0/corpora/train/es/gold
+--extension
+jnaf
+--config
+experiments/semeval2010/purge/caseBase
+experiments/semeval2010/purge/caseAll
+experiments/semeval2010/purge/casePredicativeNominative
+experiments/semeval2010/purge/caseAppositive
+experiments/semeval2010/purge/caseRelativePronoun
+experiments/semeval2010/purge/casePredicativeNominativeSingleton
+--evaluate
+--common
+experiments/semeval2010/purge/common

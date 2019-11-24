@@ -1,0 +1,17 @@
+--mention_filters
+ReplicatedSpanFilter
+NamedEntityPartFilter
+QuantityFilter
+PleonasticFilter
+DemonymFilter
+InterjectionFilter
+BareNPFilter
+QuantifierFilter
+InvalidWordFilter
+InvalidNerFilter
+NonWordFilter
+SameHeadFilter
+--output_eval_name
+PartitiveFilter
+--result
+PartitiveFilter

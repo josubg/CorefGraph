@@ -1,0 +1,5 @@
+--treebank_extension
+.pt_stanford_collins
+--external_tree
+--result
+stanford_collins

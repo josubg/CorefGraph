@@ -1,0 +1,7 @@
+--report
+--source_email
+helheim@deusto.es
+--target_emails
+josu.bermudez@deusto.es
+--mail_server
+deusto.es

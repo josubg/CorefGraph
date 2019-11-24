@@ -1,0 +1,10 @@
+--directories
+../../conll2012/corpus/key/gold/data/english/annotations/
+--extension
+naf_ixa_sem
+--config
+experiments/conll2012/trees/orig_collins
+experiments/conll2012/trees/orig_sem
+--evaluate
+--common
+experiments/conll2012/trees/base

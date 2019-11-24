@@ -1,0 +1,22 @@
+directory: ../../conll2012/corpus/official/auto/data/english/annotations/
+extension: naf_stanford_sem
+evaluate: True
+report: True
+jobs: 15 
+# Common config for all experiments
+common:
+    - experiments/conll2012/corpus_test.yaml
+    - experiments/conll2012/evaluation_open_v8.yaml
+# experiments
+config:
+    - experiments/sieves/NO.yaml
+    - experiments/sieves/1.yaml
+    - experiments/sieves/2.yaml
+    - experiments/sieves/3.yaml
+    - experiments/sieves/4.yaml
+    - experiments/sieves/5.yaml
+    - experiments/sieves/6.yaml
+    - experiments/sieves/7.yaml
+    - experiments/sieves/8.yaml
+    - experiments/sieves/9.yaml
+    - experiments/sieves/10.yaml

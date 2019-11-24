@@ -1,0 +1,8 @@
+--gold
+../../conll2011/corpus/dev/auto/
+--evaluation_script
+../../conll2011/scorer/v7/go.sh
+--metrics
+muc
+bcub
+ceafe

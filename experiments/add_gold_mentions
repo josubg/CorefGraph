@@ -1,0 +1,6 @@
+--mention_catchers
+GoldCatcher
+--mention_filters
+NO
+--mention_purges
+Singleton

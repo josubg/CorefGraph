@@ -1,0 +1,16 @@
+directory: ../../semeval2010/task01.posttask.v1.0/corpora/training/es/auto
+extension: jnaf
+evaluate: True
+report: True
+jobs: 8
+common:
+  - experiments/semeval2010/es_train.yaml
+  - experiments/semeval2010/v8.yaml
+  - experiments/catchers/permissives.yaml
+  - experiments/sieves/all_permissives.yaml
+  - experiments/filters/NO.yaml
+  - experiments/purges/NO.yaml
+  - experiments/features/spanish_multiword.yaml
+config:
+  - experiments/sieves/all_permissives.yaml
+  - experiments/sieves/all_multiword_permissives.yaml

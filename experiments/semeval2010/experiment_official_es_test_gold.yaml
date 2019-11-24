@@ -1,0 +1,17 @@
+directory: ../../semeval2010/task01.posttask.v1.0/corpora/test/es/gold
+extension: jnaf
+evaluate: True
+report: True
+common: [experiments/semeval2010/corpus/es_test.yaml, experiments/semeval2010/v8.yaml]
+config:
+  - experiments/unit_mention_detection
+  - experiments/1.yaml
+  - experiments/2.yaml
+  - experiments/3.yaml
+  - experiments/4.yaml
+  - experiments/5.yaml
+  - experiments/6.yaml
+  - experiments/7.yaml
+  - experiments/8.yaml
+  - experiments/9.yaml
+  - experiments/10.yaml

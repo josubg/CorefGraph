@@ -1,0 +1,5 @@
+writer: MEANTIME
+evaluation_script: /home/josubg/remote/meantime/scorer/v8.01/launch_scorer.sh
+metrics: [muc, bcub, ceafe, ceafm, blanc]
+f1_metrics: [muc, bcub, ceafm]
+result: V8

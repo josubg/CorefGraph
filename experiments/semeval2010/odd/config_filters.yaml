@@ -1,0 +1,3 @@
+mention_filters: [BareNPFilter, SameHeadFilter]
+mention_purges: Appositive
+result: FiltersOPT

@@ -1,0 +1,12 @@
+directory: ../../conll2012/corpus/train/gold/data/english/annotations/
+extension: naf_stanford_sem
+evaluate: True
+report: True
+jobs: 15
+# Common config for all experiments
+common:
+    - experiments/conll2012/corpus_train.yaml
+    - experiments/conll2012/evaluation_predicted_v8.yaml
+# experiments
+config:
+    - experiments/sieves/10.yaml

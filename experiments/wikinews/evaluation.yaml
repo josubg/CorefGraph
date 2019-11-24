@@ -1,0 +1,3 @@
+gold: ../../wiki-news/corpus
+evaluation_script: ../../wiki-news/scorer/v8.01/go.sh
+metrics: [muc, bcub, ceafe, blanc]

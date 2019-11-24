@@ -1,0 +1,6 @@
+language: es_semeval
+writer: semevalCONLL
+reader: NAF
+gold: ../resources/semeval_es_flat
+gold_ext: es_test_auto.conll
+result: CorpusTest

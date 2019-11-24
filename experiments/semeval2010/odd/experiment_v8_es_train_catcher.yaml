@@ -1,0 +1,23 @@
+directory: ../../semeval2010/task01.posttask.v1.0/corpora/training/es/gold
+extension: naf
+evaluate: True
+report: True
+jobs: 15
+common:
+    - experiments/semeval2010/es_train.yaml
+    - experiments/semeval2010/v8.yaml
+    - experiments/features/elliptic.yaml
+    - experiments/filters/BareNP.yaml
+    - experiments/filters/SameHeadCONLL.yaml
+    - experiments/filters/Relative.yaml
+    - experiments/purges/APPOSITIVE.yaml
+    - experiments/purges/PREDICATIVE.yaml
+    - experiments/extractors/candidate_bf.yaml
+    - experiments/extractors/mention_bf.yaml
+    - experiments/sieves/all_unreliable_head_semeval_rules_alternative.yaml
+config:
+    - experiments/catchers/pack_permissives_enumerables.yaml
+    - experiments/catchers/pack_permissives_appositives_enumerables.yaml
+    - experiments/catchers/pack_permissives_appositives.yaml
+    - experiments/catchers/pack_permissives.yaml
+

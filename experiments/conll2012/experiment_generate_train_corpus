@@ -1,0 +1,6 @@
+--directories
+../../conll2012/corpus/key/gold/data/english
+--extension
+kad
+--config
+experiments/conll2012/unit_train

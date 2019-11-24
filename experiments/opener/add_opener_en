@@ -1,0 +1,6 @@
+--language
+en
+--writer
+CONLL
+--gold
+../../opener/en/

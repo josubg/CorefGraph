@@ -1,0 +1,6 @@
+--mention_filters
+ReplicatedSpanFilter
+SameHeadFilter
+PartitiveFilter
+--result
+SameHeadFilter_PartitiveFilter

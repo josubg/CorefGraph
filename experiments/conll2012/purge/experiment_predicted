@@ -1,0 +1,14 @@
+--directories
+../../conll2012/corpus/official/auto/data/english/annotations/
+--extension
+kad
+--config
+experiments/conll2012/purge/caseBase
+experiments/conll2012/purge/caseAll
+experiments/conll2012/purge/casePredicativeNominative
+experiments/conll2012/purge/caseAppositive
+experiments/conll2012/purge/caseRelativePronoun
+experiments/conll2012/purge/casePredicativeNominativeSingleton
+--evaluate
+--common
+experiments/conll2012/purge/common_predicted

@@ -1,0 +1,83 @@
+version: 1
+disable_existing_loggers: True
+formatters:
+  simple:
+    format: '%(name)15s - %(levelname)7s - %(message)s'
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: simple
+    stream: ext://sys.stderr
+loggers:
+  pycorpus:
+    level: INFO
+    handlers: [console]
+    propagate: no
+  corefgraph:
+    level: INFO
+    handlers: [console]
+    propagate: no
+  corefgraph.output:
+    level: INFO
+    handlers: [console]
+    propagate: no
+  corefgraph.graph:
+    level: INFO
+    handlers: [console]
+    propagate: no
+  corefgraph.text_processor:
+    level: INFO
+    handlers: [console]
+    propagate: no
+  corefgraph.process.corpus:
+    level: INFO
+    handlers: [console]
+    propagate: no
+  corefgraph.process.file:
+    level: INFO
+    handlers: [console]
+    propagate: no
+  corefgraph.multisieve:
+    level: INFO
+    handlers: [console]
+    propagate: no
+  corefgraph.multisieve.features:
+    level: INFO
+    handlers: [console]
+    propagate: no
+  corefgraph.multisieve.filters:
+    level: INFO
+    handlers: [console]
+    propagate: no
+  corefgraph.multisieve.catchers:
+    level: INFO
+    handlers: [console]
+    propagate: no
+  corefgraph.multisieve.purges:
+    level: INFO
+    handlers: [console]
+    propagate: no
+  corefgraph.multisieve.extractor:
+    level: INFO
+    handlers: [console]
+    propagate: no
+  corefgraph.multisieve.core:
+    level: INFO
+    handlers: [console]
+    propagate: no
+  corefgraph.multisieve.sieves:
+    level: INFO
+    handlers: [console]
+    propagate: no
+  corefgraph.properties:
+    level: INFO
+    handlers: [console]
+    propagate: no
+  __main__:
+    level: INFO
+    handlers: [console]
+    propagate: no
+  root:
+    level: INFO
+    handlers: [console]

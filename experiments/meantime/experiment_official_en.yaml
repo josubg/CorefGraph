@@ -1,0 +1,14 @@
+directory: /home/josubg/remote/meantime/corpus/meantime_newsreader_english_oct15/intra-doc_annotation
+extension: stanford_naf
+evaluate: True
+report: True
+jobs: 15
+# Common config for all experiments
+common:
+    - experiments/meantime/corpus_test_en.yaml
+    - experiments/sieves/10.yaml
+# experiments
+config:
+    - experiments/meantime/evaluation_v8_en_singletons_gold.yaml
+    - experiments/meantime/evaluation_v8_en_singletons.yaml
+#    - experiments/meantime/evaluation_v8_en.yaml

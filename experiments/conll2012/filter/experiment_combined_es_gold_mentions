@@ -1,0 +1,13 @@
+--directories
+../../semeval2010/task01.posttask.v1.0/corpora/test/es/gold
+--extension
+jnaf
+--config
+experiments/conll2012/filter/SHF_PF
+experiments/conll2012/filter/SHF_IWF
+experiments/conll2012/filter/PF_IWF
+experiments/conll2012/filter/SHF_IWF_PF
+experiments/add_gold_mentions
+--evaluate
+--common
+experiments/conll2012/filter/common

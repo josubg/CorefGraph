@@ -1,0 +1,5 @@
+sieves: [GOLD]
+mention_catchers: GoldCatcher
+mention_filters: NO
+mention_purges: NO
+result: Gold

@@ -1,0 +1,10 @@
+directory: /home/josubg/remote/conll2012/corpus/official/auto/data/english/annotations/wb/a2e/00/
+file: /home/josubg/remote/conll2012/corpus/official/auto/data/english/annotations/wb/a2e/00/a2e_0019-000.naf_stanford_sem
+extension: patata
+jobs: 1
+common:
+    - experiments/meantime/corpus_test_en.yaml
+    - experiments/sieves/10.yaml
+# experiments
+config:
+    - experiments/meantime/evaluation_v8_en_singletons_gold.yaml

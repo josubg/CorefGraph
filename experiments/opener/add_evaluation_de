@@ -1,0 +1,4 @@
+--evaluation_script
+../../conll2011/scorer/go.sh
+--gold
+../../opener/de

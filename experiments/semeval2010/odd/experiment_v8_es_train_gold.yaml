@@ -1,0 +1,17 @@
+directory: ../../semeval2010/task01.posttask.v1.0/corpora/training/es/auto
+extension: naf
+evaluate: False
+report: False
+jobs: 15
+common:
+    - experiments/semeval2010/es_train.yaml
+    - experiments/semeval2010/v8.yaml
+    - experiments/catchers/gold_appositive.yaml
+    - experiments/features/elliptic.yaml
+    - experiments/filters/BNP.yaml
+    - experiments/filters/CSHF.yaml
+    - experiments/filters/RF.yaml
+    - experiments/purges/APPOSITIVE.yaml
+    - experiments/purges/PREDICATIVE.yaml
+config:
+    - experiments/sieves/all_unreliable.yaml

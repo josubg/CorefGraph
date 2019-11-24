@@ -1,0 +1,10 @@
+--directories
+~/remote/conll2011/corpus/dev/auto/data/english/annotations/
+--extension
+kad
+--config
+experiments/unit_mention_detection
+experiments/unit_sieve_1
+--evaluate
+--common
+experiments/conll/add_closed:experiments/conll/evaluation_dev_auto

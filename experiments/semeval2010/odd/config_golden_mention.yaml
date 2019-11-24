@@ -1,0 +1,5 @@
+sieves: [SPM, ESM, RSM, PCM, SHMSNE_A, SHMSNE_B, SHMSNE_C, SHMSNE_D, RHMSNE_A, PNM]
+mention_catchers: GoldCatcher
+mention_filters: NO
+mention_purges: NO
+result: golden_boundaries

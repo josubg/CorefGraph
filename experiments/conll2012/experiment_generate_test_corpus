@@ -1,0 +1,6 @@
+--directories
+../../conll2012/corpus/train/auto/data/english/annotations/
+--extension
+kad
+--config
+experiments/conll2012/unit_train

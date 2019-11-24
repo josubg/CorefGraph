@@ -1,0 +1,7 @@
+--singleton
+--sieves
+GOLD
+--output_eval_name
+conll
+--result
+conll

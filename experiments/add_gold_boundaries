@@ -1,0 +1,15 @@
+--mention_catchers
+GoldCatcher
+--mention_filters
+ReplicatedSpanFilter
+BareNPFilter
+QuantityFilter
+PleonasticFilter
+DemonymFilter
+InterjectionFilter
+PartitiveFilter
+QuantifierFilter
+InvalidWordFilter
+InvalidNerFilter
+NonWordFilter
+SameHeadFilter

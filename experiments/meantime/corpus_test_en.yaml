@@ -1,0 +1,3 @@
+gold: /home/josubg/remote/meantime/corpus/meantime_newsreader_english_oct15/intra-doc_annotation
+language: en_conll
+reader: NAF

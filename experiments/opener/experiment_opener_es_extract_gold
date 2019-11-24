@@ -1,0 +1,8 @@
+--directories
+../../opener/es
+--extension
+kaf
+--config
+experiments/unit_extract_gold
+--common
+experiments/opener/add_opener_es:experiments/add_gold_boundaries:experiments/add_singleton

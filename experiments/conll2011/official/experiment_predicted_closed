@@ -1,0 +1,10 @@
+--directories
+~/remote/conll2011/corpus/official/auto/
+--extension
+kad
+--config
+experiments/unit_mention_detection
+experiments/unit_sieve_10
+--evaluate
+--common
+experiments/conll2011/add_closed:experiments/conll2011/evaluation_test

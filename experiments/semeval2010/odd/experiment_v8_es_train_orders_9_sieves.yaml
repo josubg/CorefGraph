@@ -1,0 +1,34 @@
+directory: ../../semeval2010/task01.posttask.v1.0/corpora/training/es/gold
+extension: naf
+evaluate: True
+report: True
+jobs: 15
+common:
+    - experiments/semeval2010/es_train.yaml
+    - experiments/semeval2010/v8.yaml
+    - experiments/catchers/pack_permissives_appositives.yaml
+    - experiments/features/elliptic.yaml
+    - experiments/filters/BareNP.yaml
+    - experiments/filters/SameHeadCONLL.yaml
+    - experiments/filters/Relative.yaml
+    - experiments/purges/APPOSITIVE.yaml
+    - experiments/purges/PREDICATIVE.yaml
+    - experiments/sieves/9_unreliable_head_semeval_rules.yaml
+config:
+    - [experiments/extractors/candidate_bfs.yaml, experiments/extractors/mention_dfs.yaml]
+    - [experiments/extractors/candidate_bfs.yaml, experiments/extractors/mention_dfss.yaml]
+    - [experiments/extractors/candidate_bfs.yaml, experiments/extractors/mention_bfs.yaml]
+    - [experiments/extractors/candidate_bfs.yaml, experiments/extractors/mention_bfss.yaml]
+    - [experiments/extractors/candidate_bfss.yaml, experiments/extractors/mention_dfs.yaml]
+    - [experiments/extractors/candidate_bfss.yaml, experiments/extractors/mention_dfss.yaml]
+    - [experiments/extractors/candidate_bfss.yaml, experiments/extractors/mention_bfs.yaml]
+    - [experiments/extractors/candidate_bfss.yaml, experiments/extractors/mention_bfss.yaml]
+    - [experiments/extractors/candidate_dfs.yaml, experiments/extractors/mention_dfs.yaml]
+    - [experiments/extractors/candidate_dfs.yaml, experiments/extractors/mention_dfss.yaml]
+    - [experiments/extractors/candidate_dfs.yaml, experiments/extractors/mention_bfs.yaml]
+    - [experiments/extractors/candidate_dfs.yaml, experiments/extractors/mention_bfss.yaml]
+    - [experiments/extractors/candidate_dfss.yaml, experiments/extractors/mention_dfs.yaml]
+    - [experiments/extractors/candidate_dfss.yaml, experiments/extractors/mention_dfss.yaml]
+    - [experiments/extractors/candidate_dfss.yaml, experiments/extractors/mention_bfs.yaml]
+    - [experiments/extractors/candidate_dfss.yaml, experiments/extractors/mention_bfss.yaml]
+

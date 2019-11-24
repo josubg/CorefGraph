@@ -1,0 +1,5 @@
+directory: ../../semeval2010/task01.posttask.v1.0/corpora/test/es/auto
+extension: jnaf
+evaluate: True
+common: experiments/semeval2010/corpus/es_test
+config: experiments/semeval2010/evaluation_gold

@@ -1,0 +1,9 @@
+directory: ~/remote/wiki-news/corpus/
+extension: inaf
+evaluate: True
+report: True
+common:
+    - experiments/wikinews/base.yaml
+    - experiments/wikinews/evaluation.yaml
+config:
+    - experiments/sieves/10.yaml

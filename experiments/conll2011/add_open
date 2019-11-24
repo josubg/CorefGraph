@@ -1,0 +1,12 @@
+--conll
+--writer
+CONLL
+--speaker_extension
+.spk
+--language
+en_conll
+--external_tree
+--treebank_extension
+.th
+--extractor_options
+probabilistic_gender

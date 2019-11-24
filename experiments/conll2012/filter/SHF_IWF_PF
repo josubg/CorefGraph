@@ -1,0 +1,7 @@
+--mention_filters
+ReplicatedSpanFilter
+quantitiveFileter
+InvalidWordFilter
+PartitiveFilter
+--result
+SameHeadFilter_InvalidWordFilter_PartitiveFilter

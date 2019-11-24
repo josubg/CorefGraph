@@ -1,0 +1,5 @@
+directories: ../../conll2012/corpus/official/auto/data/english/annotations/
+extension: naf_stanford_sem
+evaluate:  True
+# experiments
+config:   experiments/conll2012/corpus_test.yalm:experiments/conll2012/evaluation_default.yalm

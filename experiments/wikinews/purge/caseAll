@@ -1,0 +1,9 @@
+--mention_purges
+Appositive
+PredicativeNominative
+RelativePronoun
+Singleton
+--output_eval_name
+AllPurges
+--result
+AllPurges

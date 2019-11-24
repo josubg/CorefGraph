@@ -1,0 +1,5 @@
+--thread
+--thread_file
+corefgraph/resources/examples/motel_parse.xml
+--thread_config
+experiments/unit_sieve_10:experiments/add_naf

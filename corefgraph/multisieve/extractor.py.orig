@@ -1,0 +1,352 @@
+# coding=utf-8
+""" Module that contains all necessary stuff to detect the mentions present in a
+ sentence and supply a ordered list of candidates for each mention.
+
+"""
+
+
+from logging import getLogger
+from collections import defaultdict
+
+from corefgraph.graph.syntactic import SyntacticTreeUtils
+from corefgraph.resources.tagset import constituent_tags, ner_tags
+from corefgraph.constants import SPAN, NER, FORM, ID, POS, TAG, QUOTED, UTTERANCE, CONSTITUENT, CONSTITUENT_ALIGN, \
+    HEAD_OF_NER
+from filters import filters_by_name
+from catchers import catchers_by_name
+
+__author__ = 'Josu Bermúdez <josu.bermudez@deusto.es>'
+
+
+class SentenceCandidateExtractor:
+    """ Extract all the mentions of a text. The text if analysed sentence by
+    sentence."""
+
+    logger = getLogger(__name__)
+
+    def __init__(
+            self, graph, graph_builder,
+            mention_catchers,
+            mention_filters,
+            soft_filter,
+            options=None):
+        self.logger.info("Options: %s", options)
+
+        self.graph = graph
+        self.graph_builder = graph_builder
+        self.tree_utils = SyntacticTreeUtils(self.graph)
+
+        self.catchers = self.load_catchers(
+            graph_builder, mention_catchers, options)
+
+        self.filters = self.load_filters(
+            graph_builder, mention_filters, options)
+        self.soft_filter = soft_filter
+
+        # List used to keep mention during the tree traversal
+        self.sentence_mentions_bft_order = []
+        self.sentence_mentions_dft_order = []
+
+        # The spans are used to avoid duplicate mentions and mention inside NE
+        self.candidates_span = []
+
+        self.gold_entities = {}
+        self.gold_mentions_span = []
+        self.gold_mentions_by_constituent = defaultdict(list)
+
+        self.named_entities = []
+        self.named_entities_span = []
+        self.named_entities_by_constituent = defaultdict(list)
+
+    def load_filters(self, graph_builder, mention_filters, options):
+        """ Load the filters used during mention retrieving, also add ALL and
+        NO options.
+
+        @param graph_builder: The graph Builder
+        @param mention_filters: The list of filters to load(their short name).
+        @param options: A list string used to pase options to filters.
+        @return: the list of filter instances.
+        """
+        self.logger.info("Filters: %s", mention_filters)
+        return [filters_by_name[filter_name](
+                graph_builder, self.tree_utils, self, options, )
+                for filter_name in mention_filters]
+
+    def load_catchers(self, graph_builder, mention_catchers, options):
+        """ Load the catchers used during mention retrieving.
+
+        @param graph_builder: The graph Builder
+        @param mention_catchers: The list of filters to load(their short name).
+        @param options: A list string used to pass options to catchers.
+        @return: the list of catchers instances.
+        """
+        self.logger.info("Catchers: %s", mention_catchers)
+        return [catchers_by_name[catcher_name](
+                graph_builder, self.tree_utils, self, options, )
+                for catcher_name in mention_catchers]
+
+    def _validate_node(self, mention_candidate):
+        """Determine if a node is a valid mention.
+
+        @param mention_candidate: The candidate Node (Word or chunk) to be
+            validates as mention.
+        """
+        for catcher in self.catchers:
+            if catcher.catch_mention(mention_candidate=mention_candidate):
+                return True
+        return False
+
+    def filter_candidate(self, mention_candidate):
+        """ Check if the mention candidate is valid.
+
+        @param mention_candidate: A plausible mention.
+        """
+        for mention_filter in self.filters:
+            if mention_filter.filter(mention_candidate):
+                if self.soft_filter:
+                    mention_candidate["invalid"] = True
+                    return False
+                return True
+        return False
+
+    def _extract_mentions_from_constituent_deep(self, root):
+        """ Extract mentions from the sentence and generate a candidate list
+        for each mention. The constituent syntax graph is traversed in filtered
+        breath-first-transverse order. Each element(constituent or word) is
+        evaluated and (if is found valid) added with is coreference candidates
+        to the candidature tuple.
+
+        @param root: The root of the sentence syntactic tree.
+        candidates.
+        """
+        # The ordered nodes of the constituent tha can be candidates
+        nodes = [root]
+        visited = []
+        # Process all the nodes
+        while nodes:
+            # Extract the first candidate
+            node = nodes.pop(0)
+            visited.append(node)
+            # constituent entities
+            for ner in self.named_entities_by_constituent.get(node[ID], []):
+                if ner in self.sentence_mentions_dft_order:
+                    self.sentence_mentions_dft_order.append(ner)
+            # Constituents and words
+            if node in self.sentence_mentions_bft_order:
+                self.sentence_mentions_dft_order.append(node)
+            # Clauses are traversed in same way as roots
+            if constituent_tags.clauses(node.get(TAG)):
+                self._process_constituent_deep(node)
+            else:
+                # Order the children of the nodes
+                ordered_children = sorted(
+                    self.graph_builder.get_syntactic_children(node),
+                    key=lambda child: child[SPAN])
+                # Add the children to the search
+                nodes.extend(ordered_children)
+
+    def _extract_mentions_from_constituent_breadth(self, root):
+        """ Extract mentions from the sentence and generate a candidate list
+        for each mention. The constituent syntax graph is traversed in filtered
+        breath-first-transverse order. Each element(constituent or word) is
+        evaluated and (if is found valid) added with is coreference candidates
+        to the candidature tuple.
+
+        @param root: The root of the sentence syntactic tree.
+        candidates.
+        """
+        # The ordered nodes of the constituent tha can be candidates
+        nodes = [root]
+        visited = []
+        # Process all the nodes
+        while nodes:
+            # Extract the first candidate
+            node = nodes.pop(0)
+            visited.append(node)
+            # constituent entities
+            for ner in self.named_entities_by_constituent.get(node[ID], []):
+                if self._validate_node(ner):
+                    self.logger.debug(
+                        "Mention NER accepted: -%s- -%s- %s",
+                        ner[FORM], ner[NER])
+                    if not self.filter_candidate(mention_candidate=node):
+                        self.candidates_span.append(ner[SPAN])
+                        self.sentence_mentions_bft_order.append(ner)
+            # Constituents and words
+            if self._validate_node(node):
+                self.logger.debug(
+                    "Mention accepted: -%s- -%s- %s",
+                    node[FORM], node[ID],
+                    node.get(POS, None) or node.get(TAG))
+                if not self.filter_candidate(mention_candidate=node):
+                    self.candidates_span.append(node[SPAN])
+                    node[NER] = self.graph_builder.get_head_word(node).get(HEAD_OF_NER, "O")
+                    self.sentence_mentions_bft_order.append(node)
+            # Clauses are traversed in same way as roots
+            if constituent_tags.clauses(node.get(TAG)):
+                self._process_constituent_breadth(node)
+            else:
+                # Order the children of the nodes
+                ordered_children = sorted(
+                    self.graph_builder.get_syntactic_children(node),
+                    key=lambda child: child[SPAN])
+                # Add the children to the search
+                nodes = ordered_children + nodes
+
+    def _process_constituent_breadth(self, s_chunk):
+        """Process each constituent of the chunk in a breath-first-transverse
+
+        @param s_chunk: The chunk where each element must be traversed
+            separately
+        """
+        # Visit each constituent in a BFT algorithm
+        ordered_constituents = sorted(
+            self.graph_builder.get_syntactic_children(s_chunk),
+            key=lambda child: child[SPAN])
+        for constituent in ordered_constituents:
+            self._extract_mentions_from_constituent_breadth(constituent)
+
+    def _process_constituent_deep(self, s_chunk):
+        """Process each constituent of the chunk in a breath-first-transverse
+
+        @param s_chunk: The chunk where each element must be traversed
+            separately
+        """
+        # Visit each constituent in a DFT algorithm
+        ordered_constituents = sorted(
+            self.graph_builder.get_syntactic_children(s_chunk),
+            key=lambda child: child[SPAN])
+        for constituent in ordered_constituents:
+            self._extract_mentions_from_constituent_deep(constituent)
+
+    def _process_named_entities(self, sentence):
+        """Add the named entities to the candidates.
+
+        For every entity in the sentence:
+            + Add their span for quick check
+            + Add their reference to a list
+            + Add their reference by constituent
+
+
+        @param sentence: The base node for the sentence named entities.
+            usually the root node.
+        """
+        for entity in self.graph_builder.get_sentence_named_entities(sentence):
+            self.named_entities.append(entity)
+            constituent = self.tree_utils.allocate_into_tree(
+                entity, sentence)
+            self.graph_builder.get_head_word(entity)[HEAD_OF_NER] = entity[NER]
+            if ner_tags.mention_ner(entity[NER]):
+                entity_span = entity[SPAN]
+                # check is not already added
+                # Allocate in the tree
+                # Add the mention to registers
+                self.named_entities_span.append(entity_span)
+                self.named_entities_by_constituent[constituent[ID]]\
+                    .append(entity)
+
+    def _process_gold_mentions(self, sentence):
+        """Add the named entities to the candidates.
+
+        For every mention in the sentence:
+            + Store as a mention
+            + Add their span for the no inside NE restriction
+         @param sentence: The base node for the sentence named entities. usually
+             the root node.
+        """
+        for gold_mention in self.graph_builder.get_sentence_gold_mentions(sentence):
+            # Try to match a NE
+            gold_mention_span = gold_mention[SPAN]
+            self.logger.debug(
+                "Gold mention allocation: Start (%s)", gold_mention[FORM])
+            if gold_mention_span in self.named_entities_span:
+                # Fitting NE
+                for name_entity in self.named_entities:
+                    if gold_mention_span == name_entity[SPAN]:
+                        self.logger.debug("Gold mention allocation: NE paired")
+                        # Lock the mention in the tree
+                        self.graph_builder.link_root(
+                            gold_mention, self.graph_builder.get_root(name_entity))
+                        self.graph_builder.set_head(
+                            gold_mention,
+                            self.graph_builder.get_head_word(name_entity))
+                        constituent = name_entity[CONSTITUENT]
+                        name_entity["GOLD"] = gold_mention[ID]
+                        gold_mention[CONSTITUENT] = constituent
+                        # Inherit attributes from NE
+                        gold_mention[UTTERANCE] = name_entity[UTTERANCE]
+                        gold_mention[QUOTED] = name_entity[QUOTED]
+                        gold_mention[NER] = name_entity[NER]
+                        gold_mention[self.graph_builder.doc_type] = \
+                            name_entity[self.graph_builder.doc_type]
+                        self.logger.debug("Gold mention allocation: NE paired %s", constituent[FORM])
+                        gold_mention[CONSTITUENT_ALIGN] = "NE_" + name_entity[CONSTITUENT_ALIGN]
+                        break
+                else:
+                    # Apparently something failed, this doesn't happens if NE
+                    # load is correct
+                    constituent = self.tree_utils.allocate_into_tree(
+                        gold_mention, sentence)
+                    if gold_mention[CONSTITUENT_ALIGN] == "fitted":
+                        constituent["GOLD"] = gold_mention[ID]
+                    gold_mention["NE_align"] = "FAIL"
+                    self.logger.warning(
+                        "Gold Mention allocation: NE pairing failed %s", constituent[FORM])
+            else:
+                # Allocate in the tree
+                constituent = self.tree_utils.allocate_into_tree(
+                    gold_mention, sentence)
+                gold_mention["NE_align"] = False
+                self.logger.debug(
+                    "Gold Mention allocation: constituent pairing %s", constituent[FORM])
+
+            # Add the mention to registers
+            self.gold_mentions_by_constituent[constituent[ID]].append(gold_mention)
+            constituent["Gold_mention_id"] = gold_mention[ID]
+            constituent["Gold_mention_align"] = gold_mention[CONSTITUENT_ALIGN] == "fitted"
+            # The id is entity_index#mention_index
+            entity = gold_mention[ID].split("#")[0]
+            self.gold_mentions_span.append(gold_mention_span)
+            try:
+                self.gold_entities[entity].append(gold_mention)
+            except KeyError:
+                self.logger.debug("New Entity: ")
+                self.gold_entities[entity] = [gold_mention]
+
+    def process_sentence(self, sentence):
+        """ Extract al the mentions of the Order all graph syntactic trees in
+        filtered breath-first-transverse.
+
+        @param sentence: The sentence whose mentions are wanted.
+        """
+        self.sentence_mentions_bft_order = []
+        self.sentence_mentions_dft_order = []
+
+        self.named_entities_by_constituent = defaultdict(list)
+        self.gold_mentions_by_constituent = defaultdict(list)
+        # The spans are used to avoid duplicate mentions and mention inside NE
+        self.candidates_span = []
+        self.named_entities_span = []
+        remove_mentions = []
+        # Prepare the Named entities before the tree traversal
+        self._process_named_entities(sentence)
+        self._process_gold_mentions(sentence)
+        # Skip useless Root nodes
+        syntax_root = self.tree_utils.skip_root(sentence)
+        # Thought the rabbit hole
+        self._process_constituent_deep(s_chunk=syntax_root)
+        self._process_constituent_breadth(s_chunk=syntax_root)
+        # Text appearance order
+        sentence_mentions_textual_order = [
+            mention for mention in sorted(
+                self.sentence_mentions_dft_order,
+                key=lambda m: (m[SPAN][0], m[SPAN][1] * -1))
+            if mention[ID] not in remove_mentions]
+        sentence_mentions_candidate_order = [
+            mention for mention in
+            self.sentence_mentions_bft_order
+            if mention[ID] not in remove_mentions]
+        return (
+            sentence_mentions_candidate_order,
+            sentence_mentions_textual_order,
+        )

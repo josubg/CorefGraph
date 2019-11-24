@@ -1,0 +1,2 @@
+candidate_extractor: breadth_first_subordinate
+result: CE_BFS

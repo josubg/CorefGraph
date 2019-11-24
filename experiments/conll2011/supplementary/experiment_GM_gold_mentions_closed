@@ -1,0 +1,10 @@
+--directories
+~/remote/conll2011/corpus/supplementary/mentions/data/english/annotations/
+--extension
+kad
+--config
+experiments/unit_sieve_1
+experiments/unit_sieve_10
+--evaluate
+--common
+experiments/conll/add_closed:experiments/conll/evaluation_test:experiments/add_gold_mentions

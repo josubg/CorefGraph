@@ -1,0 +1,10 @@
+--directories
+../../conll2012/corpus/key/gold/data/english/annotations/
+--extension
+naf_stanford_collins
+--config
+experiments/conll2012/trees/stanford_collins
+experiments/conll2012/trees/stanford_collins_naf
+--evaluate
+--common
+experiments/conll2012/trees/base

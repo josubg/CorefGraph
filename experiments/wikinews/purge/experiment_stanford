@@ -1,0 +1,15 @@
+--directories
+../../wiki-news/corpus
+--extension
+snaf
+--config
+experiments/wikinews/purge/caseBase
+experiments/wikinews/purge/caseAll
+experiments/wikinews/purge/caseSingleton
+experiments/wikinews/purge/casePredicativeNominative
+experiments/wikinews/purge/caseAppositive
+experiments/wikinews/purge/caseRelativePronoun
+experiments/wikinews/purge/casePredicativeNominativeSingleton
+--evaluate
+--common
+experiments/wikinews/evaluation:experiments/wikinews/purge/common_stanford

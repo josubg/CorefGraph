@@ -1,0 +1,20 @@
+directory: /home/josubg/remote/meantime/corpus/meantime_newsreader_spanish_nov15/intra-doc_annotation
+extension: ixa_naf
+evaluate: True
+report: True
+jobs: 15
+# Common config for all experiments
+common:
+    - experiments/catchers/permissives.yaml
+    - experiments/features/spanish_multiword.yaml
+    - experiments/filters/BNP.yaml
+    - experiments/filters/CSHF.yaml
+    - experiments/purges/APPOSITIVE.yaml
+    - experiments/purges/PREDICATIVE.yaml
+
+    - experiments/meantime/corpus_test_es.yaml
+    - experiments/meantime/evaluation_v8_es.yaml
+# experiments
+config:
+    - experiments/sieves/10.yaml
+

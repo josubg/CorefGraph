@@ -1,0 +1,6 @@
+--language
+nl
+--writer
+CONLL
+--gold
+../../opener/nl/

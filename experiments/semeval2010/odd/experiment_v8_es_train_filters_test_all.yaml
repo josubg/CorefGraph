@@ -1,0 +1,22 @@
+directory: ../../semeval2010/task01.posttask.v1.0/corpora/training/es/auto
+extension: jnaf
+evaluate: True
+report: True
+common:
+    - experiments/sieves/NO.yaml
+    - experiments/purges/NO.yaml
+    - experiments/catchers/permissives.yaml
+    - experiments/semeval2010/es_train.yaml
+    - experiments/semeval2010/v8.yaml
+config:
+    - experiments/filters/BNP.yaml
+    - experiments/filters/DF.yaml
+    - experiments/filters/IF.yaml
+    - experiments/filters/IWF.yaml
+    - experiments/filters/NWF.yaml
+    - experiments/filters/PF.yaml
+    - experiments/filters/PLF.yaml
+    - experiments/filters/QF.yaml
+    - experiments/filters/QRF.yaml
+    - experiments/filters/SHF.yaml
+    - experiments/filters/NO

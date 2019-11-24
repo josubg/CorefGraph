@@ -1,0 +1,6 @@
+directories:  ../../semeval2010/task01.posttask.v1.0/corpora/test/es/auto
+extension: jnaf
+evaluate: True
+report: True
+common: [experiments/semeval2010/corpus/es_test.yaml, experiments/semeval2010/official.yaml]
+config: [experiments/semeval2010/config_PH_PC]

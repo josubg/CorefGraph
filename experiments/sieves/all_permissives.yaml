@@ -1,0 +1,2 @@
+sieves: [SPM, ESM, RSM, PCM, SEMEVAL_SHM_A, SEMEVAL_SHM_B, SEMEVAL_SHM_C, SEMEVAL_SHM_D, SEMEVAL_RHM_A, PNM]
+result: Sieves_Permissives

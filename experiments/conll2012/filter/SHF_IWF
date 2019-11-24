@@ -1,0 +1,6 @@
+--mention_filters
+ReplicatedSpanFilter
+SameHeadFilter
+InvalidWordFilter
+--result
+SameHeadFilter_InvalidWordFilter

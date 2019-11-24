@@ -1,0 +1,27 @@
+reader: NAF
+language: en_conll
+extractor_options:
+    - probabilistic_gender
+mention_catchers:
+    - NamedEntities
+    - EnumerableCatcher
+    - ConstituentCatcher
+    - PronounCatcher
+mention_filters:
+    - QuantityFilter
+    - PleonasticFilter
+    - DemonymFilter
+    - InterjectionFilter
+    - PartitiveFilter
+    - BareNPFilter
+    - QuantifierFilter
+    - InvalidWordFilter
+    - NonWordFilter
+    - ConllSameHeadFilter
+mention_purges:
+    - Appositive
+    - PredicativeNominative
+    - RelativePronoun
+    - Singleton
+writer: wiki
+

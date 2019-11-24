@@ -1,0 +1,9 @@
+--directories
+../../opener/en
+--extension
+kaf
+--config
+experiments/unit_sieve_10
+--evaluate
+--common
+experiments/opener/add_opener_en:experiments/add_gold_boundaries:experiments/add_singleton:experiments/opener/add_evaluation_en

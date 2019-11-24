@@ -1,0 +1,9 @@
+writer: MEANTIME
+evaluation_script: /home/josubg/remote/meantime/scorer/v8.01/launch_scorer.sh
+metrics: [muc, bcub, ceafe, ceafm, blanc]
+f1_metrics: [muc, bcub, ceafe]
+result: V8_singletons_gold
+mention_catchers: [GoldCatcher]
+mention_filters: NO
+mention_purges: NO
+extractor_options: [probabilistic_gender]

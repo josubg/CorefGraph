@@ -1,0 +1,5 @@
+--mention_filters
+PartitiveFilter
+InvalidWordFilter
+--result
+PartitiveFilter_InvalidWordFilter

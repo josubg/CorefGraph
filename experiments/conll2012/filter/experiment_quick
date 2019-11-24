@@ -1,0 +1,9 @@
+--directories
+../../conll2012/corpus/official/auto/data/english/annotations/
+--extension
+kad
+--config
+experiments/conll2012/filter/PLF
+--evaluate
+--common
+experiments/conll2012/filter/common_predicted_mention
