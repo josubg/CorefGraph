@@ -1,17 +1,14 @@
-file: ../resources/semeval2010//training/es/auto/CESS-CAST-A_12375_20000119.naf
-evaluate: True
-report: True
-jobs: 15
-common:
-    - experiments/semeval2010/corpus/es_train.yaml
-    - experiments/semeval2010/evaluation/v8.yaml
-    - experiments/extractors/candidate_bfcs.yaml
-    - experiments/extractors/mention_bf.yaml
-    - experiments/catchers/pack_classic.yaml
-    - experiments/features/base.yaml
-    - experiments/filters/BareNP.yaml
-    - experiments/filters/SameHeadCONLL.yaml
-    - experiments/purges/APPOSITIVE.yaml
-    - experiments/purges/PREDICATIVE.yaml
-config:
-    - experiments/sieves/all.yaml
+file: ../resources/semeval2010//training/es/auto/CESS-CAST-AA_4675_20000807.naf
+language: es_semeval
+writer: semevalCONLL
+reader: NAF
+meta_json: True
+candidate_extractor: breadth_first_per_child_subordinate
+mention_extractor: breadth_first
+mention_catchers: [NamedEntitiesCatcher, ConstituentCatcher, PronounCatcher]
+mention_features: [ner, type, number, gender, animacy, person, speaker, generic, dependency, demonym, construction]
+mention_filters: BareNPFilter
+mention_filters: ConllSameHeadFilter
+mention_purges: [Appositive]
+mention_purges: [PredicativeNominative]
+sieves: [SPM, ESM, RSM, PCM, SHMA, SHMB, SHMC, SHMD, RHM, PNM]

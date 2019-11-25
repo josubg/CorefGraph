@@ -30,7 +30,7 @@ class SentenceCandidateExtractor:
             mention_catchers,
             mention_filters,
             mention_extractor, candidate_extractor,
-            soft_filter, meta_info):
+            soft_filter,gold_boundaries, meta_info):
 
         # meta info
         self._mentions = dict()
@@ -66,6 +66,7 @@ class SentenceCandidateExtractor:
         self.filters = self._load_filters(
             graph_builder, mention_filters)
         self.soft_filter = soft_filter
+        self.gold_boundaries =gold_boundaries
 
         # List used to keep mention during the tree traversal
         self._sentence_mentions_bft_order = []
@@ -77,7 +78,7 @@ class SentenceCandidateExtractor:
 
         # Gold mention storage structures
         self.gold_entities = {}
-        self.gold_mentions_by_span = {}
+        #self.gold_mentions_by_span = {}
         self.gold_entities_spans = []
         self.sentence_gold_mentions_by_constituent = defaultdict(list)
 
@@ -161,7 +162,7 @@ class SentenceCandidateExtractor:
     def _catch(self, mention_candidate):
         span_str = str(mention_candidate[SPAN])
         for catcher in self.catchers:
-            if catcher.catch(mention_candidate=mention_candidate):
+            if catcher.catch(mention_candidate):
                 # Candidate is accepted
                 if self.meta_info:
                     # Remove the candidate form the lost candidate list (a upper representation of the span
@@ -256,9 +257,9 @@ class SentenceCandidateExtractor:
             else:
                 # Candidate is not filtered and is not in Gold response (Good Filtering: True positive)
                 self._no_filtered[span_str] = [mention_candidate[ID], "NONE"]
-        if mention_candidate[SPAN] in self.gold_entities_spans:
-            mention_candidate["GOLD"] = self.gold_mentions_by_span[mention_candidate[SPAN]]
-        # candidate is not filtered
+        # if mention_candidate[SPAN] in self.gold_entities_spans:
+        #     mention_candidate["GOLD"] = self.gold_mentions_by_span[mention_candidate[SPAN]]
+        # # candidate is not filtered
         return False
 
     def add_mention(self, mention):
@@ -422,6 +423,8 @@ class SentenceCandidateExtractor:
         for gold_mention in self.graph_builder.get_sentence_gold_mentions(sentence):
             # Try to match a NE
             self.gold_entities_spans.append(gold_mention[SPAN])
+            if not self.gold_boundaries:
+                continue
             gold_mention_span = gold_mention[SPAN]
             self.logger.debug(
                 "Gold mention allocation: Start (%s)", gold_mention[FORM])
@@ -471,12 +474,12 @@ class SentenceCandidateExtractor:
             constituent["Gold_mention_align"] = gold_mention[CONSTITUENT_ALIGN] == "fitted"
             # The id of a gold mention is entity_index#mention_index
             entity = gold_mention[ID].split("#")[0]
-            self.gold_mentions_by_span[gold_mention_span] = gold_mention
-            try:
-                self.gold_entities[entity].append(gold_mention)
-            except KeyError:
-                self.logger.debug("New Entity: ")
-                self.gold_entities[entity] = [gold_mention]
+            #self.gold_mentions_by_span[gold_mention_span] = gold_mention
+            # try:
+            #     self.gold_entities[entity].append(gold_mention)
+            # except KeyError:
+            #     self.logger.debug("New Entity: ")
+            #     self.gold_entities[entity] = [gold_mention]
 
     # Sentence extraction entry point
     def process_sentence(self, sentence):
@@ -513,8 +516,13 @@ class SentenceCandidateExtractor:
             order=self.sentence_candidates_order,
             root=syntax_root, validation=self._check_node,
             named_entities_by_constituent=self.sentence_named_entities_by_constituent,
-            gold_mentions_by_constituent=self.sentence_gold_mentions_by_constituent
+            gold_mentions_by_constituent=self.sentence_gold_mentions_by_constituent,
         )
+
+        self._lost_caught.update({
+             str(span): ("NO", "OUT")
+             for span in self.gold_entities_spans
+             if (str(span) not in self._ok_caught) and (str(span) not in self._wrong_filtered)})
 
         return (
             self.sentence_candidates_order,

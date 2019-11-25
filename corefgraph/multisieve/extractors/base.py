@@ -92,9 +92,11 @@ class Breadth:
         :param gold_mentions_by_constituent: The gold mentions ordered by constituent.
         """
         # Process all the nodes
+        visited = []
         while nodes:
             # Extract the first candidate
             node = nodes.pop(0)
+            visited.append(node)
             # Constituents Gold mentions
             for gold in gold_mentions_by_constituent.get(node[ID], []):
                 # check if is an accepted mention
@@ -119,6 +121,7 @@ class Breadth:
                     key=lambda child: child[SPAN])
                 # Add the children to the search
                 nodes.extend(ordered_children)
+        a = 1
 
 
 class Deep:

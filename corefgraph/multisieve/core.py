@@ -85,6 +85,7 @@ class CoreferenceProcessor:
     local_mentions_constant = "LOCAL_MENTIONS"
     soft_purge_constant = "SOFT_PURGES"
     soft_filter_constant = "SOFT_FILTERS"
+    gold_boundaries_constant = "GOLD_BOUNDARIES"
 
     def __init__(self,
                  graph_builder,
@@ -102,6 +103,12 @@ class CoreferenceProcessor:
         self.meta_info = meta_info
         self.purges_names = mention_purges
         self.purges = self.load_purges(mention_purges)
+
+        if self.gold_boundaries_constant in extractor_options:
+            self.logger.info("Gold boundaries")
+            self.gold_boundaries = True
+        else:
+            self.gold_boundaries = False
 
         if self.soft_filter_constant in extractor_options:
             self.logger.info("Filters in soft mode")
@@ -122,6 +129,7 @@ class CoreferenceProcessor:
             mention_catchers=mention_catchers,
             mention_filters=mention_filters,
             soft_filter=self.soft_filters,
+            gold_boundaries=self.gold_boundaries,
             meta_info=self.meta_info
         )
         self.multi_sieve = MultiSieveProcessor(
@@ -199,71 +207,81 @@ class CoreferenceProcessor:
 
         self.logger.info("Indexed clusters: %d", indexed_clusters)
 
+    def purge_mention(self, unfiltered_mention):
+        for purge in self.purges:
+            # Pass mention for each purge
+            if purge.purge_mention(unfiltered_mention):
+                self.logger.debug("purged mention(%s): %s",
+                                  purge.short_name, unfiltered_mention[FORM])
+                # Store the meta info
+                return True, purge.short_name
+        return False, "NONE"
+
+    def purge_entity(self, mentions):
+        for purge in self.purges:
+            if purge.purge_entity(mentions):
+                self.entities_purged.append((",".join((mention[ID] for mention in mentions)), purge.short_name))
+                self.logger.debug("Purged entity: %s", purge.short_name)
+                return True, purge.short_name
+        return False, "NONE"
+
     def post_process(self, coreference_proposal, gold_mentions, indexed_clusters):
         self.logger.info("POST-Processing Coreference (%s clusters)", len(coreference_proposal))
         # Purge the coreference clusters add the acceptable ones to the graph
+        filtered_mentions = []
         for index, entity in enumerate(coreference_proposal):
-            mentions = []
-            # Filter the mentions os the entity
+            clean_mentions = []
+            # Filter the mentions of the entity
             for unfiltered_mention in entity:
-                # Pass mention for each purge
-                for purge in self.purges:
-                    # Purge the mention
-                    span_str = str(unfiltered_mention[SPAN])
-                    if purge.purge_mention(unfiltered_mention):
-                        self.logger.debug("purged mention(%s): %s",
-                                          purge.short_name, unfiltered_mention[FORM])
+                # Purge the mention
+                purged, purge = self.purge_mention(unfiltered_mention)
+                if purged:
+                    if self.soft_purges:
                         # If soft purges are activated, not ignore the mention create a new entity for it
-                        if self.soft_purges:
-                            coreference_proposal.append([unfiltered_mention, ])
-                        # Store the meta info
-                        if self.meta_info:
-                            if unfiltered_mention[SPAN] in gold_mentions:
-                                self.logger.debug("Wrong purged")
-                                self.wrong_purged[span_str] = [unfiltered_mention[ID], purge.short_name, ]
-                            else:
-                                self.ok_purged[span_str] = [unfiltered_mention[ID], purge.short_name, ]
-                        break
+                        coreference_proposal.append([unfiltered_mention])
+                    else:
+                        filtered_mentions.append((unfiltered_mention, purge))
                 else:
                     # If no purge breaks the cycle then the mention is valid
-                    mentions.append(unfiltered_mention)
-                    # Store the meta
-                    span_str = str(unfiltered_mention[SPAN])
-                    if self.meta_info:
-                        if unfiltered_mention[SPAN] in gold_mentions:
-                            self.not_purged[span_str] = [unfiltered_mention[ID], ]
-                        else:
-                            self.logger.debug("Lost purged")
-                            self.lost_purged[span_str] = [unfiltered_mention[ID], ]
-            # If entity is empty not need to check it
-            if len(mentions) == 0:
-                continue
-            # Check the full entity Against the purges
-            for purge in self.purges:
-                if purge.purge_entity(mentions):
-                    self.entities_purged.append((",".join((mention[ID] for mention in mentions)), purge.short_name))
-                    self.logger.debug("Purged entity: %s", purge.short_name)
-                    # Store the meta
-                    if self.meta_info:
-                        # store meta for each mention in the entity
-                        for filtered_mention in mentions:
-                            span_str = str(filtered_mention[SPAN])
-                            if span_str in self.lost_purged:
-                                del self.lost_purged[span_str]
+                    clean_mentions.append(unfiltered_mention)
 
-                            if filtered_mention[SPAN] in gold_mentions:
-                                # A wrong purge false positive
-                                self.logger.debug("Wrong purged(Entity purge)")
-                                self.wrong_purged[span_str] = [unfiltered_mention[ID], purge.short_name, ]
-                            else:
-                                # A correct purge True positive
-                                self.ok_purged[span_str] = [unfiltered_mention[ID], purge.short_name, ]
-                    # Not a valid entity skip the adding stage
-                    break
+            # Skip empty entities
+            if len(clean_mentions) == 0:
+                continue
+
+            # Check the full entity Against the purges
+            purged, purge = self.purge_entity(clean_mentions)
+            if purged:
+                filtered_mentions.extend([(mention, purge) for mention in clean_mentions])
             else:
-                # If nothing break until here Add the entity tho the response
+                # Add the entity tho the response
                 self.graph_builder.add_coref_entity(
-                    entity_id="EN{0}".format(index), mentions=mentions)
+                    entity_id="EN{0}".format(index), mentions=clean_mentions)
                 # Increment the entity index
                 indexed_clusters += 1
+                # Store the meta
+                if self.meta_info:
+                    for mention in clean_mentions:
+                        span_str = str(mention[SPAN])
+                        if mention[SPAN] in gold_mentions:
+                            # A wrong purge false positive
+                            self.logger.debug("Wrong purged(Entity purge)")
+                            self.not_purged[span_str] = [mention[ID], "NONE"]
+                        else:
+                            # A correct purge True positive
+                            self.lost_purged[span_str] = [mention[ID], "NONE"]
+
+        # Store meta for purged mentions
+        if self.meta_info:
+            for filtered_mention, purge in filtered_mentions:
+                span_str = str(filtered_mention[SPAN])
+
+                if filtered_mention[SPAN] in gold_mentions:
+                    # A wrong purge false positive
+                    self.logger.debug("Wrong purged(Entity purge)")
+                    self.wrong_purged[span_str] = [filtered_mention[ID], purge, ]
+                else:
+                    # A correct purge True positive
+                    self.ok_purged[span_str] = [filtered_mention[ID], purge, ]
+        # Not a valid entity skip the adding stage
         return indexed_clusters
