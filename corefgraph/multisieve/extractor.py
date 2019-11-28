@@ -25,6 +25,10 @@ class SentenceCandidateExtractor:
 
     logger = getLogger(__name__)
 
+    @property
+    def gold_entities_spans(self):
+        return self.gold_mentions_by_span.keys()
+
     def __init__(
             self, graph_builder,
             mention_catchers,
@@ -66,7 +70,7 @@ class SentenceCandidateExtractor:
         self.filters = self._load_filters(
             graph_builder, mention_filters)
         self.soft_filter = soft_filter
-        self.gold_boundaries =gold_boundaries
+        self.gold_boundaries = gold_boundaries
 
         # List used to keep mention during the tree traversal
         self._sentence_mentions_bft_order = []
@@ -78,8 +82,8 @@ class SentenceCandidateExtractor:
 
         # Gold mention storage structures
         self.gold_entities = {}
-        #self.gold_mentions_by_span = {}
-        self.gold_entities_spans = []
+        self.gold_mentions_by_span = {}
+
         self.sentence_gold_mentions_by_constituent = defaultdict(list)
 
         # Named entities storage structures
@@ -191,7 +195,7 @@ class SentenceCandidateExtractor:
             if mention_candidate[SPAN] in self.gold_entities_spans:
                 # It is a gold one Bad catching (a bottom representation of the span may be checked later, but
                 # the lost is annotated)
-                self._lost_caught[span_str] = [mention_candidate[ID], "NONE"]
+                self._lost_caught[span_str] = [mention_candidate[ID], "Uncaught"]
                 self._mention_meta(mention_candidate)
             # Correct false cases aren't annotated because it will be overwhelming
         return False
@@ -253,12 +257,12 @@ class SentenceCandidateExtractor:
             # Check if is gold one
             if mention_candidate[SPAN] not in self.gold_entities_spans:
                 # Candidate is not filtered and is not in Gold response (Bad filtering: False Negative)
-                self._lost_filtered[span_str] = [mention_candidate[ID], "NONE"]
+                self._lost_filtered[span_str] = [mention_candidate[ID], "Not filtered"]
             else:
                 # Candidate is not filtered and is not in Gold response (Good Filtering: True positive)
-                self._no_filtered[span_str] = [mention_candidate[ID], "NONE"]
-        # if mention_candidate[SPAN] in self.gold_entities_spans:
-        #     mention_candidate["GOLD"] = self.gold_mentions_by_span[mention_candidate[SPAN]]
+                self._no_filtered[span_str] = [mention_candidate[ID], "Not filtered"]
+        if mention_candidate[SPAN] in self.gold_entities_spans:
+            mention_candidate[GOLD] = self.gold_mentions_by_span[mention_candidate[SPAN]]
         # # candidate is not filtered
         return False
 
@@ -422,10 +426,11 @@ class SentenceCandidateExtractor:
         """
         for gold_mention in self.graph_builder.get_sentence_gold_mentions(sentence):
             # Try to match a NE
-            self.gold_entities_spans.append(gold_mention[SPAN])
+            gold_mention_span = gold_mention[SPAN]
+            self.gold_mentions_by_span[gold_mention_span] = gold_mention
             if not self.gold_boundaries:
                 continue
-            gold_mention_span = gold_mention[SPAN]
+
             self.logger.debug(
                 "Gold mention allocation: Start (%s)", gold_mention[FORM])
             if gold_mention_span in self.named_entities_span:
@@ -474,7 +479,7 @@ class SentenceCandidateExtractor:
             constituent["Gold_mention_align"] = gold_mention[CONSTITUENT_ALIGN] == "fitted"
             # The id of a gold mention is entity_index#mention_index
             entity = gold_mention[ID].split("#")[0]
-            #self.gold_mentions_by_span[gold_mention_span] = gold_mention
+
             # try:
             #     self.gold_entities[entity].append(gold_mention)
             # except KeyError:
@@ -520,9 +525,9 @@ class SentenceCandidateExtractor:
         )
 
         self._lost_caught.update({
-             str(span): ("NO", "OUT")
+             str(span): ("NO", "Unaligned")
              for span in self.gold_entities_spans
-             if (str(span) not in self._ok_caught) and (str(span) not in self._wrong_filtered)})
+             if (str(span) not in self._ok_caught) and (str(span) not in self._lost_caught)})
 
         return (
             self.sentence_candidates_order,

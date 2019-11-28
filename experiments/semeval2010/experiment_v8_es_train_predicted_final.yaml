@@ -10,7 +10,6 @@ common:
     - experiments/extractors/mention_bf.yaml
     - experiments/catchers/pack_permissives.yaml
     - experiments/features/elliptic.yaml
-    - experiments/filters/BareNP.yaml
     - experiments/filters/SameHeadCONLL.yaml
     - experiments/filters/Relative.yaml
     - experiments/purges/APPOSITIVE.yaml

@@ -6,7 +6,7 @@
 from collections import Counter
 from logging import getLogger
 
-from corefgraph.constants import SPAN, ID, FORM, UTTERANCE, POS, NER, SPEAKER, CONSTITUENT, TAG
+from corefgraph.constants import SPAN, ID, FORM, UTTERANCE, POS, NER, SPEAKER, CONSTITUENT, TAG, GOLD
 from corefgraph.resources.dictionaries import pronouns, stopwords
 from corefgraph.resources.rules import rules
 from corefgraph.resources.tagset import ner_tags, constituent_tags
@@ -722,8 +722,8 @@ class Sieve(object):
 
         # mention_id = mention.get(SPAN, "")
         # candidate_id = candidate.get(ID, "")
-        mention_id = mention.get("GOLD", {ID: mention[ID]}).get(ID)
-        candidate_id = candidate.get("GOLD", {ID: candidate[ID]}).get(ID)
+        mention_id = mention.get(GOLD, {ID: mention[ID]}).get(ID)
+        candidate_id = candidate.get(GOLD, {ID: candidate[ID]}).get(ID)
         if "#" not in mention_id or "#" not in candidate_id:
             return False
         mention_entity_id = mention_id.split("#")[0]

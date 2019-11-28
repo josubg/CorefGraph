@@ -31,12 +31,9 @@ class MultiSieveProcessor:
     def get_meta(self):
         # Create the meta structure
         meta = {
-            "names": self.sieves_names
+            sieve.short_name: sieve.get_meta()
+            for sieve in self.sieves
         }
-        # Retrieve Meta info for each sieve
-        for sieve in self.sieves:
-            meta[sieve.short_name] = sieve.get_meta()
-
         return meta
 
     def process(self, graph_builder, mentions_text_order, mentions_candidate_order):
@@ -215,7 +212,7 @@ class CoreferenceProcessor:
                                   purge.short_name, unfiltered_mention[FORM])
                 # Store the meta info
                 return True, purge.short_name
-        return False, "NONE"
+        return False, "unpurged"
 
     def purge_entity(self, mentions):
         for purge in self.purges:
@@ -223,7 +220,7 @@ class CoreferenceProcessor:
                 self.entities_purged.append((",".join((mention[ID] for mention in mentions)), purge.short_name))
                 self.logger.debug("Purged entity: %s", purge.short_name)
                 return True, purge.short_name
-        return False, "NONE"
+        return False, "unpurged"
 
     def post_process(self, coreference_proposal, gold_mentions, indexed_clusters):
         self.logger.info("POST-Processing Coreference (%s clusters)", len(coreference_proposal))
@@ -266,10 +263,10 @@ class CoreferenceProcessor:
                         if mention[SPAN] in gold_mentions:
                             # A wrong purge false positive
                             self.logger.debug("Wrong purged(Entity purge)")
-                            self.not_purged[span_str] = [mention[ID], "NONE"]
+                            self.not_purged[span_str] = [mention[ID], "Not purged"]
                         else:
                             # A correct purge True positive
-                            self.lost_purged[span_str] = [mention[ID], "NONE"]
+                            self.lost_purged[span_str] = [mention[ID], "Not purged"]
 
         # Store meta for purged mentions
         if self.meta_info:
