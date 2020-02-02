@@ -1,0 +1,2 @@
+mention_filters: ConllSameHeadFilter
+result: FSameHeadConll

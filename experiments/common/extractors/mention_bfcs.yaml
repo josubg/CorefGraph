@@ -1,0 +1,2 @@
+mention_extractor: breadth_first_per_child_subordinate
+result: ME_BFCS
