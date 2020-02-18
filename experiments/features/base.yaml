@@ -1,2 +1,0 @@
-mention_features: [ner, type, number, gender, animacy, person, speaker, generic, dependency, demonym, construction]
-result: features_base

@@ -1,2 +1,0 @@
-mention_catchers: [NamedEntitiesCatcher, ConstituentCatcher, PronounCatcher, AppositiveCatcher]
-result: CatchersClassicAppositive

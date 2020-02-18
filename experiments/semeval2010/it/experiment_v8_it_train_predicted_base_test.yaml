@@ -1,5 +1,5 @@
-file: ../resources/semeval2010/corpora/test/it/auto/wp_0144.naf
-language: it_tut
+file: ../resources/semeval2010/corpora/test/it/auto/wp_0148.naf
+language: it_ud
 writer: semevalCONLL
 reader: NAF
 meta_json: True

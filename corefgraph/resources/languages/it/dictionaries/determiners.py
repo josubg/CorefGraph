@@ -2,7 +2,7 @@
 __author__ = 'Valeria Quochi <valeria.quochi@ilc.cnr.it>'
 __date__ = '5/13/13'
 
-from ..lambdas import equality_checker, list_checker
+from corefgraph.resources.lambdas import list_checker
 
 indefinite_articles = list_checker(("un", "una", "uno", "un'"))
 

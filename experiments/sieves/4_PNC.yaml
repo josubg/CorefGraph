@@ -1,9 +1,0 @@
---sieves
-SPM
-ESM
-RSM
-PNC
---output_eval_name
-sieve_4_PNC
---result
-sieve_4_PNC

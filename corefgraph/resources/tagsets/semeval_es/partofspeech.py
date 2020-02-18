@@ -55,9 +55,7 @@ enumerable_mention_words = lambda x: noun(x)
 #subordinating_conjunction = fail()
 
 conjunction = matcher(r"^CC")
-
 interjection = matcher("^I")
-
 cardinal = matcher("^Z")
 
 # TODO change to Semeval tagset

@@ -81,15 +81,25 @@ class Corefgraph:
         self.graph_builder.process_document(document=document)
         sentences_parsed = self.graph_builder.get_sentences()
 
-        for index, sentence in enumerate(sentences_parsed):
-            self.logger.debug("Loading Sentence %d", index)
-            # syntax graph construction
-            sentence_root = self.graph_builder.process_sentence(
+        # for index, sentence in enumerate(sentences_parsed):
+        #     self.logger.debug("Loading Sentence %d", index)
+        #     # syntax graph construction
+        #     sentence_root = self.graph_builder.process_sentence(
+        #         sentence=sentence,
+        #         sentence_namespace="text@{0}".format(index),
+        #         root_index=index)
+        #     # Generate Coreference Candidatures for the sentence
+        #
+        #     self.coreference_processor.process_sentence(sentence=sentence_root)
+        sentence_roots = [self.graph_builder.process_sentence(
                 sentence=sentence,
                 sentence_namespace="text@{0}".format(index),
                 root_index=index)
-            # Generate Coreference Candidatures for the sentence
+                for index, sentence in enumerate(sentences_parsed)
+                ]
+        for sentence_root in sentence_roots:
             self.coreference_processor.process_sentence(sentence=sentence_root)
+
 
     def process_graph(self):
         """ Prepare the graph for output.

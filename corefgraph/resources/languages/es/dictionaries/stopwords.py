@@ -1,5 +1,5 @@
 # coding=utf-8
-""" List of Stopwords of english
+""" List of Stopwords 
 """
 from corefgraph.resources.lambdas import list_checker, equality_checker, matcher, fail
 

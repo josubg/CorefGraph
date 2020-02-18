@@ -1,6 +1,7 @@
 # coding=utf-8
+from corefgraph.resources.lambdas import equality_checker, list_checker, matcher, fail
 
-from corefgraph.resources.lambdas import list_checker, equality_checker, fail
+
 __author__ = 'Josu Bermudez <josu.bermudez@deusto.es>'
 
 

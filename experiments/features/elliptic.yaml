@@ -1,2 +1,0 @@
-mention_features: [ner, multiword, type, number, gender, animacy, person, speaker, generic, dependency, demonym, construction, elliptic]
-result: features_multiword

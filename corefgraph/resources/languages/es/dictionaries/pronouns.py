@@ -4,8 +4,8 @@
 These lists(in fact tuples or sets) are used to detect pronouns and extract function and features of them. Each element
  of these list are a lowercase form of the pronoun .
 
-Language: English
-Language-code: EN
+Language: Spanish
+Language-code: ES
 
 Expected list form the system are:
 
@@ -109,10 +109,3 @@ third_person = list_checker(("consigo", "él", "ella", "ellas", "ellos", "la", "
 all_pronouns = list_checker(("_", "su", "sus", "suyos"))
 
 pleonastic = list_checker(("eso", "_"))
-
-
-
-
-
-
-

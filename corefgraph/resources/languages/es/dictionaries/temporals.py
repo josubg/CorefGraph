@@ -1,8 +1,8 @@
 # coding=utf-8
+from corefgraph.resources.lambdas import list_checker
 
 __author__ = 'Josu Bermudez <josu.bermudez@deusto.es>'
 
-from corefgraph.resources.lambdas import list_checker, equality_checker, matcher, fail
 
 temporals = list_checker(("segundo", "minuto", "hora", "día", "semana", "mes", "año", "década", "siglo", "milenio",
              "lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo", "ahora",
