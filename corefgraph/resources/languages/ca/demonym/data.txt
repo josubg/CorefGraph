@@ -1,0 +1,252 @@
+Abkhàzia abkhaz abkhàzia
+Afganistan afganès afganesa
+Albània albanès albanesa
+Alemanya alemany alemana
+Berlín berlinès berlinesa
+Andorra andorrà andorrana
+Andorra la Vella andorrà andorrana
+Angola angolès angolesa angolano angolana
+Antigua i Barbuda antiguano antiguana
+Aràbia Saudita saudita saudita
+Algèria algerià algeriana
+Alger algerià algeriana
+Argentina argentí argentina
+Buenos Aires porteny portenya
+Armènia armeni armènia
+Aruba arubeño arbureña
+Austràlia australià australiana
+Canberra canberrano canberrana camberrano camberrana
+Àustria austríac austríaca austríac austríaca
+Viena vienès vienesa
+Azerbaidjan azerbaidjanès azerbaiyana
+Bahames bahameny bahamenya
+Bahrain de Bahrain
+Bangladesh bangladeshià
+Barbados de Barbados
+Bèlgica belga
+Brussel·les Brussel·les
+Belize de Belize beliceny belicenya
+Benín de Benín
+Bermudes de Bermudes
+Bielorússia bielorús bielorussa
+Birmània birmà birmana
+Bolívia bolivià boliviana
+Bòsnia i Hercegovina bosnià bosniana bosnioherzegovino bosnioherzegovina
+Botswana botswano botswana
+Brasil brasiler brasilera brasileny brasilenya
+Brunei de Brunei
+Bulgària búlgar búlgara
+Burkina Faso burkinès
+Burundi burundès burundesa
+Bhutan bhutanès bhutanesa
+Cap Verd capverdià capverdiana
+Cambodja cambodjà cambodjana
+Camerun camerunès camerunesa
+Canadà canadenc canadenca
+Qatar qatarí qatarina
+Txad txadià txadiana
+Xile xilè xilena
+Santiago de Xile santiaguino santiaguina
+Xina xinès xinesa
+Pequín pequinès pekinesa
+Xipre xipriota
+Ciutat de Vaticà vaticà vaticana
+Colòmbia colombià colombiana
+Bogotà de Bogotà de Bogotà
+Comores de Comores
+Corea del Nord nord-coreà nord-coreana
+Corea de Sud sud-coreà sud-coreana
+Costa d'Ivori ivorià ivoriana
+Costa Rica costa-riqueny
+Sant Josep de Sant Josep
+Croàcia croat
+Cuba cubà cubana
+Havana habanero havanera
+Curaçao de Curaçao
+Dinamarca danès danesa
+Copenhague de Copenhague
+Dominica Dominiquès dominiquesa
+Equador equatorià equatoriana
+Quito de Quito
+Egipte egipci egípcia
+Caire cairota
+Salvador salvadorenc salvadorenca
+Abu Dhabi abudabí
+Eritrea eritreu eritrea
+Eslovàquia eslovac eslovaca
+Eslovènia eslovè eslovena
+Espanya espanyol espanyola
+Madrid madrileny madrilenya
+Estats Federats de Micronèsia micronesio micronesia
+Estats Units nord-americà nord-americana nordamericà nordamericana
+Washington D washingtonià washingtoniana
+Estònia estonià estoniana
+Tallinn tallinés tallinesa
+Etiòpia etíop
+Filipines filipí filipina
+Manila de Manila
+Finlàndia finlandès finlandesa
+Fiji fijià fijiana
+França francès francesa
+Parell parisenc parisenca
+Gabon gabonès gabonesa
+Gàmbia gambià gambiana
+Geòrgia georgià georgiana
+Ghana ghanès ghanesa
+Gibraltar gibraltareny gibraltarenya
+Granada granadí granadina
+Grècia grec grega
+Atenes atenès
+Groenlàndia groenlandès groenlandesa
+Guatemala guatemaltec guatemalteca
+Guinea guineà guineana
+Guinea Bissau guineà guineana
+Guinea Equatorial equatoguineà equatoguineana
+Guaiana guyanés guyansa
+Haití haitià haitiana
+Hondures hondureny hondurenya
+Tegucigalpa tegucigalpè
+Hong Kong de Hong Kong
+Hongria hongarès hongaresa
+Índia indi índia
+Indonèsia indonesi indonèsia
+Iraq iraquià
+Bagdad de Bagdad
+Iran iranià iraniana
+Irlanda irlandès irlandesa
+Dublí dublinès dublinesa
+Islàndia islandès islandesa
+Illes Marshall marshallès marshallesa
+Salomó de Salomó
+Israel israelià israeliana
+Jerusalem jerosolimità jerosolimitana
+Itàlia italià italiana
+Roma romà romana
+Jamaica jamaicà jamaicana
+Japó japonès japonesa
+Tòquio de Tòquio toquiota
+Jordània jordà jordana
+Kazakhstà kazakh
+Kenya kenyà kenyana
+Kyrgyzstan kirguís kirguisa
+Kiribati kiribatià kiribatiana
+Kosovo kosovar
+Kuwait kuwaitià
+Laos laosià laosiana
+Lesotho de Lesotho
+Letònia letó Letona
+Líban libanès libanesa
+Beirut beirutí beirutina
+Libèria liberià liberiana
+Líbia libi líbia
+Trípoli de Trípoli
+Liechtenstein de Liechtenstein
+Lituània lituà lituana
+Luxemburg luxemburguès luxemburguesa
+Macau de Macau
+Madagascar de Madagascar
+Malàisia malaisi malàisia
+Malawi malawià
+Maldives de Maldives
+Mali de Mali
+Malta maltès maltesa
+Marroc marroquí marroquina
+Rabat de Rabat
+Maurici de Maurici
+Mauritània maurità mauritana
+Mèxic mexicà mexicana
+Ciutat de Mèxic defeño defena
+Moldàvia moldau moldava
+Mònaco monegasc monegasca
+Mongòlia mongol mongola
+Montenegro montenegrí montenegrina
+Moçambic moçambiquès moçambiquesa
+Namíbia namibi namíbia
+Nauru de Nauru
+Nepal nepalès nepalesa
+Nicaragua nicaragüenc nicaragüenca
+Managua de Managua
+Níger de Níger
+Nigèria nigerià nigeriana
+Noruega noruec noruega
+Oslo de Oslo
+Nova Zelanda neozelandès neozelandesa
+Oman omanita
+Països Baixos neerlandès neerlandesa
+Pakistan pakistanès pakistanesa
+Palestina palestí palestina
+Panamà panameny panamenya
+Paraguai paraguaià paraguaiana
+Perú peruà peruana
+Lima de Lima
+Polònia polonès polonesa
+Varsòvia varsoviano Varsoviana
+Portugal portuguès portuguesa
+Lisboa lisboeta
+Puerto Rico porto-riqueny porto-riquenya
+Sant Joan santjoaner santjoanera
+Regne Unit britànic britànica
+Londres londinenc
+República Centreafricana centreafricà
+República Txeca txec txeca
+Praga de Praga
+Taiwan taiwanès taiwanesa
+República de Macedònia macedoni macedònia
+República de Congo congolès congolesa
+República Democràtica de Congo congolès congolesa
+Kinsasa de Kinsasa
+República Dominicana dominicà dominicana
+Rwanda ruandès ruandesa
+Romania romanès romanesa
+Rússia rus russa
+Moscou moscovita
+Sàhara Occidental saharià sahariana
+Samoa samoà samoana
+Sant Cristòfol i Neus sancristobaleny sancristobalenya
+Sant Marí sanmarinès
+Ciutat de San Marino de San Marino
+Saint Vincent i les Grenadines sanvicentino sanvicentina
+Santa Llúcia santalucense
+Sant Vaig prendre i Príncep santotomense
+Senegal senegalès senegalsa
+Sèrbia serbi sèrbia
+Seychelles seychellense
+Serra Leone de Sierra Leone sierraleonesa
+Singapur singapurense
+Síria sirià siriana
+Damasc de Damasc
+Somàlia somali
+Somalilàndia somalilandés somalilanesa
+Sri Lanka singalès ceilansa singalès ceilandesa esrilanqués esrilanquesa
+Swazilàndia suazi
+Sud-àfrica sud-africà sud-africana
+Sudan sudanès sudanesa
+Sudan de Sud sudsudanès sudanesa
+Suècia suec sueca
+Estocolm estocolmés estocolesa
+Suïssa suís suïssa
+Surinam surinamés surinamesa
+Tailàndia tailandès tailandesa
+Tanzània tanzà tanzana
+Tadjikistan tadjik tadjik
+Timor Oriental timorès
+Togo togolès togolsa
+Tonga tongalès Tongana
+Trinitat i Tobago Trinitat i Tobago
+Tunísia tunisià tunisiana
+Turkmenistan turcman turcmana turcman turkmena
+Turquia turc turca
+Tuvalu Tuvalu tuvaluana
+Ucraïna ucraïnès ucraïnesa
+Uganda ugandès ugandsa
+Uruguai uruguaià uruguaiana
+Montevideo Montevideo de Montevideo
+Uzbekistan uzbek uzbeka
+Vanuatu vanuatuense
+Veneçuela veneçolà veneçolana
+Caracas de Caracas Caracas
+Vietnam vietnamita
+Iemen iemenita
+Djibouti djibutià yibutiana
+Zàmbia zambià zambiana
+Zimbabwe zimbabuès

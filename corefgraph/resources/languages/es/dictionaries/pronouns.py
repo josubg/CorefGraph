@@ -106,6 +106,6 @@ third_person = list_checker(("consigo", "él", "ella", "ellas", "ellos", "la", "
                              "se", "se", "sí", "suyas", "suya", "suyos", "suyo", "suyo",))
 
 
-all_pronouns = list_checker(("_", "su", "sus", "suyos"))
+all = list_checker(("_", "su", "sus", "suyos"))
 
 pleonastic = list_checker(("eso", "_"))

@@ -31,7 +31,7 @@ class GenericsAnnotator(FeatureAnnotator):
         # Bare plural
         if pos_tags.plural_common_noun(head_word[POS]) and \
                 (mention[SPAN][1] - mention[SPAN][0] == 0):
-            if pronouns.all_pronouns(mention[FORM]):
+            if pronouns.all(mention[FORM]):
                 #return False
                 pass
             mention[GENERIC] = True

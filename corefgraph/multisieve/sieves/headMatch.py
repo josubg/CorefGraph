@@ -188,7 +188,7 @@ class StrictHeadMatching(Sieve):
                                for word in self.get_all_words_forms(n_mention)
                                if not stopwords.stop_words(word)
                                if not stopwords.extended_stop_words(word)
-                               if not pronouns.all_pronouns(word)]
+                               if not pronouns.all(word)]
                            )
         head_word_form = rules.get_head_word_form(self.graph_builder, mention).lower()
         if head_word_form in entity_words:
@@ -236,7 +236,7 @@ class StrictHeadMatching(Sieve):
         for candidate_mention in candidate_entity:
             # Heads must match and be NNP
             candidate_head = self.get_head_word(candidate_mention)
-            if not pos_tags.proper_nouns(candidate_head[POS]):
+            if not pos_tags.proper_noun(candidate_head[POS]):
                 continue
             # The head word must be the last word of the relaxed form
             candidate_head_string = rules.get_head_word_form(
@@ -246,15 +246,15 @@ class StrictHeadMatching(Sieve):
                 continue
             # Get al the proper Nouns until the head word
             candidate_words = self.relaxed_form_word(candidate_mention)
-            candidate_proper_nouns = set([
+            candidate_proper_noun = set([
                 word[FORM].lower()
                 for word
                 in candidate_words
-                if pos_tags.proper_nouns(word[POS])])
+                if pos_tags.proper_noun(word[POS])])
             for entity_mention in entity:
                 # Heads must match and be NNP
                 mention_head = self.get_head_word(entity_mention)
-                if not pos_tags.proper_nouns(mention_head[POS]):
+                if not pos_tags.proper_noun(mention_head[POS]):
                     continue
                 mention_head_string = rules.get_head_word_form(
                     self.graph_builder, entity_mention).lower()
@@ -266,13 +266,13 @@ class StrictHeadMatching(Sieve):
                 if not mention_relaxed_form.endswith(mention_head_string):
                     continue
                 mention_words = self.relaxed_form_word(entity_mention)
-                mention_proper_nouns = set(
+                mention_proper_noun = set(
                     [word[FORM].lower()
                         for word
                         in mention_words
-                        if pos_tags.proper_nouns(word[POS])])
-                if candidate_proper_nouns.difference(mention_proper_nouns) and \
-                        mention_proper_nouns.difference(candidate_proper_nouns):
+                        if pos_tags.proper_noun(word[POS])])
+                if candidate_proper_noun.difference(mention_proper_noun) and \
+                        mention_proper_noun.difference(candidate_proper_noun):
                     continue
                 return True
         return False
@@ -431,14 +431,14 @@ class RelaxHeadMatchingVariantA(StrictHeadMatching):
             rules.get_head_word_form(self.graph_builder, candidate).lower()
         if ner_tags.mention_ner(mention.get(NER)):
             if mention.get(NER) == candidate.get(NER):
-                if pos_tags.proper_nouns(mention_head[POS]):
+                if pos_tags.proper_noun(mention_head[POS]):
                     for word_form in self.get_all_words_forms(candidate):
                         if mention_head_form == word_form:
                             return True
                         if len(mention_head_form) > 2 and \
                                 word_form.startswith(mention_head_form):
                             return True
-                if pos_tags.proper_nouns(candidate_head[POS]):
+                if pos_tags.proper_noun(candidate_head[POS]):
                     for word_form in self.get_all_words_forms(mention):
                         if candidate_head_form == word_form:
                             return True

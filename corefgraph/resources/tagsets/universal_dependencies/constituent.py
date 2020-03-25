@@ -3,16 +3,17 @@ from corefgraph.resources.lambdas import equality_checker, list_checker, matcher
 
 
 __author__ = 'Valeria Quochi <valeria.quochi@ilc.cnr.it>'
-__date__ = '5/16/2013'
+
 
 # Is a root constituent
 root = list_checker(("root", "top", "ROOT", "TOP"))
 
-"""Clause introduced by a (possibly empty) subordinating conjunction."""
-
 
 # Is a clause
 clause = list_checker(("S", "SBAR",))
+
+# Is a simple or subordinated clause
+simple_or_sub_phrase = clause
 
 # Is a Noun phrase
 noun_phrase = equality_checker("NP")
@@ -20,11 +21,30 @@ noun_phrase = equality_checker("NP")
 # Is a Verb phrase
 verb_phrase = equality_checker("VP")
 
-particle_constituents = fail()
+# Is a Adverbial phrase
+adverbial_phrase = fail()
+
+# Is a complement direct
+complement_direct = list_checker(("CD",))
+
+# Is a particle constituent
+particle_constituent = fail()
+
+# Is a past_participle verb constituent
 past_participle_verb = equality_checker("VBN")
 
-interjections = fail()
-simple_or_sub_phrase = list_checker(("S", "SBAR"))
+# Is an interjection constituent
+interjection = fail()
+
+# Is a NER annotated into semantic tree
 ner_constituent = fail()
+
+preposition = fail()
+
+enumerable = noun_phrase
+
+head_rules = noun_phrase
+
+# The mention is a plausible constituent
 mention_constituents = matcher("NP.*")
-head_rules = list_checker(("SN", "SUJ", "GRUP.NOM"))
+

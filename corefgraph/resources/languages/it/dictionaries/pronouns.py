@@ -56,4 +56,4 @@ reflexive = list_checker(("ja",))
 pleonastic = list_checker(("it",))
 no_organization = list_checker(("ja",))
 
-all_pronouns = lambda x: first_person(x) or second_person(x) or third_person(x) or others(x) or plural(x) or singular(x) or male(x) or female(x) or neutral(x) or animate(x) or inanimate(x)
+all = lambda x: first_person(x) or second_person(x) or third_person(x) or others(x) or plural(x) or singular(x) or male(x) or female(x) or neutral(x) or animate(x) or inanimate(x)

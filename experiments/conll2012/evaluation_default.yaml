@@ -2,5 +2,5 @@ treebank_extension: .pt_sem
 writer: CONLL
 evaluation_script: ../../conll2012/corpus/scorer/v8.01/launch_scorer.sh
 metrics: [muc, bcub, ceafe, blanc]
-f1_metrics: [muc, bcub, ceafe]
+aggregation_metrics: [muc, bcub, ceafe]
 result: default

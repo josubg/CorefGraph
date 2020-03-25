@@ -50,7 +50,7 @@ class NumberAnnotator(FeatureAnnotator):
         word_form = head_word[FORM].lower()
         word_form_lower = word_form.lower()
         # Pronouns
-        if pos_tags.pronoun(word_pos) or pronouns.all_pronouns(word_form_lower):
+        if pos_tags.pronoun(word_pos) or pronouns.all(word_form_lower):
             self.logger.debug("Number: Pronoun")
             if pronouns.plural(word_form_lower):
                 return PLURAL

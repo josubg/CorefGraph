@@ -1,5 +1,5 @@
 evaluation_script: ../resources/conll-scorer/v8.01/go.sh
 metrics: [ceafm, muc, bcub, blanc]
-f1_metrics: [muc, bcub, ceafm]
+aggregation_metrics: [muc, bcub, ceafm]
 result: V8
 meta_json: True

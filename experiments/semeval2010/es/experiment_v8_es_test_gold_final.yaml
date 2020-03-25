@@ -10,7 +10,7 @@ common:
     - experiments/filters/NO.yaml
     - experiments/extractors/candidate_bf.yaml
     - experiments/extractors/mention_bf.yaml
-    - experiments/features/elliptic.yaml
+    - experiments/features/spanish.yaml
     - experiments/purges/NO.yaml
 config:
     - experiments/sieves/all_unreliable_head_semeval_rules.yaml

@@ -81,7 +81,7 @@ class TrainCatcher(BaseCatcher):
         feature_tag = mention.get(TAG, NO)
 
         feature_pronoun = bool(pos_tags.mention_pronoun(feature_pos) or
-                               pronouns.all_pronouns(mention["form"]))
+                               pronouns.all(mention["form"]))
         feature_np = bool(constituent_tags.mention_constituents(feature_tag))
 
         feature_entity = mention.get(NER, NO)
@@ -89,7 +89,7 @@ class TrainCatcher(BaseCatcher):
         # head
         feature_head_pos = head.get(POS)
         feature_same_head = parent_head[ID] == head[ID]
-        feature_head_proper_noun = bool(pos_tags.proper_nouns(head.get(POS)))
+        feature_head_proper_noun = bool(pos_tags.proper_noun(head.get(POS)))
 
         # dependency
         feature_dependency_subject = False

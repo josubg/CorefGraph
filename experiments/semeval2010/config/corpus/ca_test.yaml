@@ -1,0 +1,6 @@
+language: ca
+writer: semevalCONLL
+reader: NAF
+gold: ../resources/semeval2010/corpora/flat
+gold_ext: ca_test_auto.conll
+result: CorpusTest

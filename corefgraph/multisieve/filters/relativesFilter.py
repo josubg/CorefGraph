@@ -30,7 +30,7 @@ class RelativesFilter(BaseFilter):
                 if pos_tags.determinant(words[first_word_index-1][POS]):
                     return True
             next_word = words[last_word_index+1]
-            if pos_tags.pronoun(next_word[POS]) or pronouns.all_pronouns(next_word[FORM]):
+            if pos_tags.pronoun(next_word[POS]) or pronouns.all(next_word[FORM]):
                 if mention[FORM].lower() == "que":
                     self.logger.debug(
                         "Mention is relative  %s(%s)",

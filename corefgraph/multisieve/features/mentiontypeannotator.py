@@ -65,11 +65,11 @@ class MentionTypeAnnotator(FeatureAnnotator):
             self._set_mention_type(mention, ENUMERATION_MENTION)
         # Pronoun mention
         elif (len(words) == 1 and pos_tags.pronoun(head_pos)) or\
-                (len(words) == 1 and (pronouns.all_pronouns(head_form) or pronouns.relative(head_form)) and
+                (len(words) == 1 and (pronouns.all(head_form) or pronouns.relative(head_form)) and
                  not ner_tags.mention_ner(head_word_ner)):
             self._set_mention_type(mention, PRONOUN_MENTION)
         # Proper Mention
-        elif pos_tags.proper_nouns(head_pos) or ner_tags.all(head_word_ner):
+        elif pos_tags.proper_noun(head_pos) or ner_tags.all(head_word_ner):
             self._set_mention_type(mention, PROPER_MENTION)
         # In other case is nominal
         else:

@@ -43,7 +43,7 @@ class PronounPermissiveCatcher(PronounCatcher):
         """
 
         mention_pos = mention_candidate.get(POS)
-        if pos_tags.mention_pronoun(mention_pos) or pronouns.all_pronouns(mention_candidate[FORM]):
+        if pos_tags.mention_pronoun(mention_pos) or pronouns.all(mention_candidate[FORM]):
             self.logger.debug("Mention is pronoun: %s  POS %s",
                               mention_candidate[FORM], mention_pos)
             return True

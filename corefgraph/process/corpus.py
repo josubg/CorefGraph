@@ -21,6 +21,8 @@ except ImportError as ie:
     from corefgraph import properties
 
 import pycorpus
+import os.path
+import os
 from file import generate_parser as generate_parser_for_file, process as process_file
 
 __author__ = 'Josu Bermúdez <josu.bermudez@deusto.es>'
@@ -54,9 +56,12 @@ def generate_parser():
     parser.add_argument('--metrics', dest='metrics',
                         action='append', default=[],
                         help="The metric of the evaluation.")
-    parser.add_argument('--f1_metrics', dest='f1_metrics',
+    parser.add_argument('--aggregation_metrics', dest='aggregation_metrics',
                         action='append', default=[],
-                        help="The metric of the evaluation.")
+                        help="The metric aggregation source metrics.")
+    parser.add_argument('--aggregation_name', dest='aggregation_name',
+                        action='store', default="conll",
+                        help="The metric aggregation name .")
     parser.add_argument('--speaker_extension', dest='speaker_extension',
                         action='store', default=None,
                         help="The extension of the speaker files(If exist).")
@@ -75,6 +80,9 @@ def generate_parser():
     parser.add_argument('--gold_ext', dest='golden_ext',
                         action='store', default="conll",
                         help="The golden files extension.")
+    parser.add_argument('--output_ext', dest='output_ext',
+                        action='store', default="conll",
+                        help="The output files extension.")
     parser.add_argument('--log_base', dest='log_base',
                         action='store', default="./log/",
                         help="The path of the log files")
@@ -102,30 +110,33 @@ def file_processor(file_name, config):
     path, full_name = os.path.split(file_name)
     name, ext = os.path.splitext(full_name)
     base_name = os.path.join(path, name)
-    friendly_name = config.experiment_name.replace(" ", "_")
+
+    friendly_name = os.path.join(config.series_name, config.experiment_name).replace(" ", "_")
     log_dir = os.path.join(config.log_base, friendly_name)
+    log_file = os.path.join(log_dir, name + ".log")
     try:
         os.makedirs(log_dir)
     except OSError:
         pass
+    try:
+        os.remove(log_file)
+    except OSError as e:
+        pass
 
     store_dir = os.path.join(config.output_base, friendly_name)
+    store_file = os.path.join(store_dir, name + config.output_ext)
     try:
         os.makedirs(store_dir)
     except OSError:
         pass
-    meta_dir = os.path.join(config.meta_base, friendly_name)
     try:
-        os.makedirs(meta_dir)
-    except OSError:
+        os.remove(store_file)
+    except OSError as e:
         pass
 
+    # Redirect logger to file
     formatter = logger.handlers[0].formatter
-    file_handler = logging.FileHandler(
-        filename=os.path.join(
-            log_dir,
-            name + "." + "_".join(config.result) + "." + datetime.datetime.now().time().isoformat() + ".log")
-        , mode="w")
+    file_handler = logging.FileHandler(filename=log_file , mode="w")
     file_handler.setFormatter(formatter)
     for logger_name in iter(logging.Logger.manager.loggerDict):
         if logger_name.startswith("pycorpus"):
@@ -170,7 +181,6 @@ def file_processor(file_name, config):
     config.__dict__["document_id"] = name
 
     # Open the files and pass the data to the module
-    store_file = os.path.join(store_dir, name + "." + "_".join(config.result))
     logger.info("Result stored in %s", store_file)
     with codecs.open(store_file, "w") as output_file:
         statistic = process_file(
@@ -181,7 +191,18 @@ def file_processor(file_name, config):
             output=output_file
         )
     if statistic:
-        with codecs.open(os.path.join(meta_dir, name + ".json"), "w") as output_file:
+
+        meta_dir = os.path.join(config.meta_base, friendly_name)
+        meta_file = os.path.join(meta_dir,"meta.json")
+        try:
+            os.makedirs(meta_dir)
+        except OSError:
+            pass
+        try:
+            os.remove(meta_file)
+        except OSError:
+            pass
+        with codecs.open(meta_file, "w") as output_file:
             json.dump(statistic, output_file)
 
 
@@ -193,187 +214,127 @@ def evaluate(general_config, experiment_config):
     """
     logger.info("Evaluating: %s", experiment_config.metrics)
     path, script = os.path.split(experiment_config.evaluation_script)
-    friendly_name = experiment_config.experiment_name.replace(" ", "_")
+    friendly_name = os.path.join(experiment_config.series_name, experiment_config.experiment_name).replace(" ", "_")
     coref_dir = os.path.abspath(os.path.join(experiment_config.output_base, friendly_name))
-
+    store_dir = os.path.join(experiment_config.evaluation_base, friendly_name)
+    golden_dir = os.path.abspath(experiment_config.golden)
+    golden_ext = experiment_config.golden_ext
+    coref_ext = experiment_config.output_ext
+    try:
+        os.makedirs(store_dir)
+    except OSError:
+        pass
+    logger.info("Gold stored in %s as %s", golden_dir, golden_ext)
+    logger.info("Responses stored in %s as %s", coref_dir, coref_ext)
+    logger.info("Evaluation stored in %s", store_dir)
     pycorpus.CorpusProcessor.launch_parallel(
         function=launch_evaluation,
         parameters_lists=list(experiment_config.metrics),
-        common_parameters=(coref_dir, experiment_config, path, script), jobs=len(experiment_config.metrics))
+        common_parameters=(script, coref_dir, coref_ext, golden_dir, golden_ext, store_dir, path, ),
+        jobs=len(experiment_config.metrics))
     logger.info("Evaluation end.")
 
 
 def launch_evaluation(metric, common_parameters):
-    base_dir, experiment_config, path, script = common_parameters
+    script, coref_dir, coref_ext, golden_dir, golden_ext, store_dir, path = common_parameters
+    logger.info("Metric: %s", metric)
     command = [
         "sh",
         script,
-        os.path.abspath(experiment_config.golden),
-        base_dir,
-        "_".join(experiment_config.result),
         metric,
-        experiment_config.golden_ext]
-    logger.info("Metric: %s", metric)
-    logger.debug("Command: %s", command)
-    err, out = pycorpus.CorpusProcessor.launch_with_output(
-        command, cwd=os.path.abspath(path))
+        coref_dir,
+        coref_ext,
+        golden_dir,
+        golden_ext
+    ]
+    # logger.info("CWD: %s", os.path.abspath(path))
+    # logger.info("Command: %s", " ".join(command))
+    err, out = pycorpus.CorpusProcessor.launch_with_output(command, cwd=os.path.abspath(path))
     if err:
         sys.stderr.write(err)
-    evaluation_dir = os.path.join(experiment_config.evaluation_base, experiment_config.experiment_name.replace(" ", "_"))
-    try:
-        os.makedirs(evaluation_dir)
-    except OSError:
-        pass
-    store_file = os.path.join(evaluation_dir, "{0}.{1}".format("_".join(experiment_config.result), metric))
-    logger.info("Evaluation stored in %s", store_file)
-    with codecs.open(store_file, "w") as output_file:
+
+    with codecs.open("{}.{}".format(store_dir, metric), "w") as output_file:
         output_file.write(err)
         output_file.write(out)
 
 
-def report(experiment_config, common_config):
+def report(general_config, common_config, experiment_configs):
     """ Generate a email report of the experiment.
 
     :param experiment_config: The config.
     :param common_config: The config used in all experiments.
     """
-    logger.info("Generating report")
-    logger.info("F1 : %s", common_config.f1_metrics)
-    friendly_name = common_config.experiment_name.replace(" ", "_")
+    friendly_name = general_config.series_name.replace(" ", "_")
     eval_dir = os.path.join(common_config.evaluation_base, friendly_name)
+    logger.info("Generating report")
+    logger.info("reading from: " + eval_dir)
+    logger.info("F1 : %s", common_config.aggregation_metrics)   
+    with open(eval_dir+".md", "w") as report_file:
+        report_file.write("##### {}\n".format(general_config.series_name))
+        report_file.write(header(["MD"] + common_config.metrics + [common_config.aggregation_name]))
+        for experiment in experiment_configs:
+            results = generate_report(
+                path=os.path.join(eval_dir, experiment.experiment_name).replace(" ", "_"),
+                metrics=common_config.metrics + ["MD"], )
+            calculate_aggeration(results, common_config.aggregation_metrics, common_config.aggregation_name)
+            report_file.write(table(experiment.experiment_name, results,
+                            ["MD"] + common_config.metrics + [common_config.aggregation_name]))
 
-    report_text = generate_report(
-        path=eval_dir,
-        baseline_file=common_config.result_base,
-        metrics=common_config.metrics,
-        f1_metrics=common_config.f1_metrics)
-    print(report_text)
+
+def table(name, results, metrics):
+    flat_metric = [(m, k)
+                  for m in metrics
+                  for k in ("R", "P", "F1")]
+    return "| {} | ".format(name) + " | ".join("{0:.2f}".format(results[m]) for m in flat_metric) + " |\n"
 
 
-def generate_report(path, baseline_file=None, metrics=(), f1_metrics=()):
+def header(metrics):
+    return '\n|  | ' + ' |  |  | '.join(metrics ) + ' | | |\n' + \
+           '| ' + ' | '.join(["---"] * 19) + ' |\n' + \
+           '| ' + ' | '.join(["system"] + ["R", "P", "F1"] * 6) + ' |\n'
+
+
+def calculate_aggeration(results, aggregation_metrics, aggregation_name):
+    try:
+        results[(aggregation_name, "R")] = sum([results[(m, "R")] for m in aggregation_metrics])/len(aggregation_metrics)
+        results[(aggregation_name, "P")] = sum([results[(m, "P")] for m in aggregation_metrics])/len(aggregation_metrics)
+        results[(aggregation_name, "F1")] = sum([results[(m, "F1")] for m in aggregation_metrics])/len(aggregation_metrics)
+        return False
+    except KeyError:
+        results[(aggregation_name, "R")] = float("NaN")
+        results[(aggregation_name, "P")] = float("NaN")
+        results[(aggregation_name, "F1")] = float("NaN")
+        return True
+
+
+def generate_report(path, metrics):
     """ Find any result files in path and make a report with it.
 
-    :param path: The path of the evaluation results.
-    :param baseline_file: A file that contains a csv values to compare.
+    :param path: The path of the evaluation directory.
     :param metrics: The metrics showed in the report.
-    :param f1_metrics: The metric used to calculate de F1 value.
 
-    :return: a list of Strings with the report.
+    :return: a dictionary containing the numeric results .
+
     """
-    if len(metrics) == 0:
-        metrics = ["MD", "bcub", "ceafe", "ceafm", "muc"]
-    if len(f1_metrics) == 0:
-        f1_metrics = ("muc", "bcub", "ceafe",)
-    else:
-        metrics.append("conll")
-    row_separator = "\n"
-    column_separator = "|"
+    results = {}
+    for metric in metrics:
+        if metric == "MD":
+            # Calculate mention detection with fastest metric
+            m = "muc"
+        else:
+            m = metric
+        with open(path + "." + m, "r") as evaluation_file:
+            evaluation = evaluation_file.read()
 
-    red = "\x1b[31m"
-    green = "\x1b[32m"
-    reset = "\x1b[0m"
-
-    regex_pattern = r"\d+\.?\d*(?=%)"
-
-    base_table = {}
-    if baseline_file:
-        base_table = json.load(open(baseline_file))
-
-    file_list = [
-        os.path.join(path, file_name)
-        for file_name in os.listdir(path)]
-    file_list.sort()
-    results = collections.defaultdict(lambda: collections.defaultdict(dict))
-    for file_name in file_list:
-        path, full_name = os.path.split(file_name)
-        caption, extension = os.path.splitext(full_name)
-        caption = caption.replace("_", " ")
-        extension = extension[1:]
-        with open(file_name) as scoring_file:
-            inside = scoring_file.readlines()
-            try:
-                if inside[-1].startswith("-"):
-                    recall, precision, f1 = re.findall(regex_pattern, inside[-2])
-                else:
-                    recall, precision, f1 = re.findall(regex_pattern, inside[-1])
-            except ValueError as v_error:
-                    logger.warning("Score %s, or all its elements, not found at %s", extension, caption)
-                    continue
-
-            results[caption][extension] = (recall, precision, f1)
-
-            # this is only need to do once but doesn't harm do more(if evaluation
-            # script is correct)
-            if inside[-3].startswith("-"):
-                recall, precision, f1 = re.findall(regex_pattern, inside[-4])
+            if metric == "MD":
+                line, r_index, p_index, f1_index = -3, -4, -3, -2
             else:
-                recall, precision, f1 = re.findall(regex_pattern, inside[-2])
-            try:
-                results[caption]["MD"] = recall, precision, f1
-            except ValueError as v_error:
-                logger.warning("MD Score, or all its elements, not found")
-                continue
-            del inside
-
-    table = []
-    # Fill the rows of the table
-    for sieve in sorted(results.keys()):
-        table.append(sieve)
-        f1 = 0.00
-        for metric in sorted(results[sieve].keys()):
-            try:
-                buff = []
-                for x in range(len(results[sieve][metric])):
-                    base = base_table[sieve][(metrics.index(metric) * 3) + x]
-                    actual = float(results[sieve][metric][x])
-                    if base > actual:
-                        buff.append("{0}{1:5.2f}#{2:.2f}{3}".format
-                                    (red, actual, abs(actual - base), reset))
-                    elif base < actual:
-                        buff.append(
-                            "{0}{1:5.2f}#{2:.2f}{3}".format(
-                                green, actual, actual - base, reset))
-                    else:
-                        buff.append("{0:10.2f}".format(actual))
-                table.extend(buff)
-            except KeyError:
-                # print ex
-                table.extend(["{0:9.2f}".format(float(actual)) for actual in
-                              results[sieve][metric]])
-            if metric in f1_metrics:
-                f1 += float(results[sieve][metric][2])
-        if f1_metrics:
-            actual = f1 / len(f1_metrics)
-            try:
-                base = float(base_table[sieve][15])
-            except KeyError:
-                base = actual
-            if actual < base:
-                table.append(
-                    "{0}{1:5.2f}({2:.2f}){3}".format(red, actual, actual - base,
-                                                     reset))
-            elif base < actual:
-                table.append(
-                    "{0}{1:5.2f}({2:.2f}){3}".format(green, actual, actual - base,
-                                                     reset))
-            else:
-                table.append("{0:10.2f}".format(actual))
-        table.append(row_separator)
-    # Add the head of the table
-    head_row = list()
-    head_row.append("config".ljust(len(table[0])))
-    for label in sorted(results.items()[0][1].keys()):
-        head_row.extend([
-            "{0:>7}_R".format(label),
-            "{0:>7}_P".format(label),
-            "{0:>7}_F".format(label),
-        ])
-    if f1_metrics:
-        head_row.append("{0:>10}".format("conll_F"))
-    head_row.append(row_separator)
-    table = head_row + table
-
-    return column_separator.join(table).replace(row_separator + column_separator, row_separator)
+                line, r_index, p_index, f1_index = -5, -4, -3, -2
+            tokens = evaluation.split("\n")[line].split("%")
+            results[metric, "R"] = float(tokens[r_index].split(" ")[-1])
+            results[metric, "P"] = float(tokens[p_index].split(" ")[-1])
+            results[metric, "F1"] = float(tokens[f1_index].split(" ")[-1])
+    return results
 
 
 def main(config_files=False):

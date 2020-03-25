@@ -1,19 +1,8 @@
 # coding=utf-8
-""" Ancora POS tag checkers.
-
-Each elements in this module is a function that check if a POS tag.
-
-Elements starting with _ is only for internal use.
-"""
-from corefgraph.resources.lambdas import list_checker, equality_checker, matcher, fail
+from corefgraph.resources.lambdas import equality_checker, matcher, fail
 
 __author__ = 'Josu Bermudez <josu.bermudez@deusto.es>'
 
-_pronouns = matcher(r"^P")
-_possessive_determinant = matcher("^DP")
-_possessive_pronouns = matcher(r"^PX")
-_personal_pronouns = matcher(r"^PP")
-_elliptic_pronoun = matcher(r"^PL")
 
 # Features questions
 female = matcher(r"^[ADP]..F|^N.F|^V.....F")
@@ -31,37 +20,35 @@ adjective = matcher(r"^A")
 
 
 # Pronouns
-pronoun = lambda x: _pronouns(x) or _possessive_determinant(x)
+pronoun = matcher(r"^D?P")
+personal_pronoun = matcher(r"^PP")
 relative_pronoun = matcher(r"^PR")
-mention_pronoun = lambda x: _personal_pronouns(x) or _possessive_pronouns(x) or _possessive_determinant(x) \
-    or relative_pronoun(x) or _elliptic_pronoun(x)
+interrogative_pronoun = matcher(r"^PT")
+mention_pronoun = matcher(r"P[PXRL]|^DP") 
 
 # Nouns
-singular_common_noun = lambda x: common_nouns(x) and singular(x)
-plural_common_noun = lambda x: common_nouns(x) and plural(x)
-common_nouns = matcher(r"^NC")
-proper_nouns = matcher(r"^NP")
+singular_common_noun = matcher(r"^NC.S")
+plural_common_noun = matcher(r"^NC.P")
+common_noun = matcher(r"^NC")
+proper_noun = matcher(r"^NP")
 noun = matcher(r"^N")
 
 # Verbs
 verb = matcher(r"^V")
 modal = fail()
-
-mod_forms = lambda x: noun(x) or adjective(x) or verb(x) or cardinal(x)
+mod_forms = matcher(r"NVZA")
 indefinites = matcher(r"^.I")
 
 # Enumerations
-enumerable_mention_words = lambda x: noun(x)
-#subordinating_conjunction = fail()
+enumerable_mention_words = noun
 
 conjunction = matcher(r"^CC")
 interjection = matcher("^I")
 cardinal = matcher("^Z")
 
-# TODO change to Semeval tagset
-head_rules = matcher("^N")
-# Language specifics
-# Determinant
-determinant = matcher("^D")
-interrogative_pronoun = matcher(r"^PT")
 
+# Determinant
+determinant = matcher("^D[^I]")
+indefinite = matcher("^.I")
+
+head_rules = matcher("^N")

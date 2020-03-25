@@ -48,10 +48,10 @@ _noun = matcher(r"pos=n")
 _common = matcher(r".*postype=common")
 _proper = matcher(r".*postype=proper")
 noun = _noun
-common_nouns = lambda x: _noun(x) and _common(x)
-proper_nouns = lambda x: _noun(x) and _proper(x)
-singular_common_noun = lambda x: common_nouns(x) and singular(x)
-plural_common_noun = lambda x: common_nouns(x) and plural(x)
+common_noun = lambda x: _noun(x) and _common(x)
+proper_noun = lambda x: _noun(x) and _proper(x)
+singular_common_noun = lambda x: common_noun(x) and singular(x)
+plural_common_noun = lambda x: common_noun(x) and plural(x)
 
 #Verbs
 _aux = matcher(r".*postype=aux")
@@ -63,7 +63,7 @@ mod_forms = lambda x: noun(x) or adjectives(x) or verbs(x) or cardinal(x)
 indefinites = matcher(r".*postype=indefinite")
 
 # Enumerations
-enumerable_mention_words = lambda x: proper_nouns(x)
+enumerable_mention_words = lambda x: proper_noun(x)
 wh_words = fail()
 subordinating_conjunction = fail()
 conjunctions = matcher(r".*postype=coordinating")

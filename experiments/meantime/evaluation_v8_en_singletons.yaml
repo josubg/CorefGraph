@@ -1,7 +1,7 @@
 writer: MEANTIME
 evaluation_script: /home/josubg/remote/meantime/scorer/v8.01/launch_scorer.sh
 metrics: [muc, bcub, ceafe, ceafm, blanc]
-f1_metrics: [muc, bcub, ceafe]
+aggregation_metrics: [muc, bcub, ceafe]
 result: V8_singletons
 mention_catchers: [NamedEntities, EnumerableCatcher, ConstituentCatcher, PronounCatcher]
 mention_filters: [QuantityFilter, PleonasticFilter, DemonymFilter, InterjectionFilter, PartitiveFilter, BareNPFilter, QuantifierFilter, InvalidWordFilter, NonWordFilter, ConllSameHeadFilter]

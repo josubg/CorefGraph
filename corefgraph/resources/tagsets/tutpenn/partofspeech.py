@@ -26,7 +26,7 @@ mention_pronoun = lambda x: relative_pronoun(x) or personal_pronoun(x)
 
 singular_common_noun = equality_checker("^NOU_CS")
 plural_common_noun = equality_checker("^NOU_CP")
-proper_nouns = matcher("^NOU~PR")
+proper_noun = matcher("^NOU~PR")
 noun = matcher("^NOU.*")
 
 verbs = matcher("^V.*")

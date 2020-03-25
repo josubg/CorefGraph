@@ -16,6 +16,6 @@ common:
     - experiments/common/purges/APPOSITIVE.yaml
     - experiments/common/purges/PREDICATIVE.yaml
 config:
-    - experiments/common/sieves/all.yaml
-    - experiments/common/sieves/all_unreliable_head_semeval_rules.yaml
-    - experiments/common/sieves/all_unreliable_head_semeval.yaml
+    - [experiments/common/sieves/all.yaml, "#Base"]
+    - [experiments/common/sieves/all_unreliable_head_semeval_rules.yaml, "#Unreliable head rules"]
+    - [experiments/common/sieves/all_unreliable_head_semeval.yaml, "#Unreliable head rules"]

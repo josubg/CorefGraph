@@ -1,2 +1,2 @@
-mention_features: [ner, type, number, gender, animacy, person, speaker, generic, dependency, demonym, construction]
-result: features_base
+mention_features: [ner, type, number, gender, animacy, person, speaker, generic, dependency, demonym, construction, multiword, elliptic]
+result: features_spanish

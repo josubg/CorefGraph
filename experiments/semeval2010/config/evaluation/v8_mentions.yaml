@@ -1,4 +1,4 @@
 evaluation_script: ../resources/conll-scorer/v8.01/go.sh
 metrics: [muc]
-f1_metrics: [muc]
+aggregation_metrics: [muc]
 result: V8

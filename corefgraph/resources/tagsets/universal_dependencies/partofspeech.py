@@ -1,49 +1,53 @@
 # coding=utf-8
-from corefgraph.resources.lambdas import equality_checker, fail, matcher
+from corefgraph.resources.lambdas import equality_checker, matcher, fail
 
 __author__ = 'Valeria Quochi <valeria.quochi@ilc.cnr.it>'
-__date__ = '5/16/2013'
 
-# features questions
-female = matcher(".*FEM.*")
-male = matcher(".*MASC.*")
+
+# Features questions
+female = matcher("FEM")
+male = matcher("MASC")
 neutral = fail()
-singular = equality_checker(".*SING.*")
-plural = equality_checker(".*PLUR.*")
+
+singular = equality_checker("SING")
+plural = equality_checker("PLUR")
+
 animate = fail()
 inanimate = fail()
 
-
 # Adjectives
-adjective = matcher("^ADJ.*")
+adjective = matcher("^ADJ")
 
 
-# pronouns
+# Pronouns
+pronoun = matcher("^PRON.*")
 personal_pronoun = matcher("^PRON.*PRS")
 relative_pronoun = matcher("^PRON.*REL")
-pronoun = matcher("^PRON.*")
+interrogative_pronoun = matcher("^PRON.*INT")
 mention_pronoun = lambda x: relative_pronoun(x) or personal_pronoun(x)
 
-singular_common_noun = equality_checker("^NOUN.*SING.*")
-plural_common_noun = equality_checker("^NOUN.*PLUR.*")
-proper_nouns = matcher("^PROPN")
-noun = lambda x: proper_nouns(x) or matcher("^NOUN")
+# Nouns
+singular_common_noun = matcher("^NOUN.*SING.*")
+plural_common_noun = matcher("^NOUN.*PLUR.*")
+common_noun = matcher("^NOUN.*")
+proper_noun = matcher("^PROPN")
+noun = matcher("^PROPN|^NOUN")
 
-verbs = matcher("^VERB")
-modals = equality_checker("^AUX")
-mod_forms = lambda x: singular_common_noun(x) or plural_common_noun(x) or adjective(x) or verbs(x) or cardinal(x)
+# Verbs
+verb = matcher("^VERB")
+modal = equality_checker("^AUX")
+mod_forms = lambda x: common_noun(x) or adjective(x) or verb(x) or cardinal(x)
+indefinites= fail()
 
-
-# enumerations
+# Enumerations
 enumerable_mention_words = noun
 
 conjunction = equality_checker("CONJ")
-interjections = equality_checker("INTERJ")
+interjection = equality_checker("INTERJ")
 cardinal = equality_checker("CD")
-# wh_words = lambda x: not verbs(x) and matcher("DE$")
 
+# Determinant
+determinant = lambda x: not verb(x) and matcher("DET")
+indefinite = lambda x: not verb(x) and matcher("IND")
 
-determinant = lambda x: not verbs(x) and matcher("DET.*")
-indefinite = lambda x: not verbs(x) and matcher(".*IND.*")
-
-head_rules = matcher("#^NOU.*")
+head_rules = noun

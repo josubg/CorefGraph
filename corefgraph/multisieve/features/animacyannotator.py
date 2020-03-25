@@ -53,7 +53,7 @@ class AnimacyAnnotator(FeatureAnnotator):
         normalized_form = re.sub("\d", "0", normalized_form)
         normalized_pos = word_pos.replace("$", "")
         # Pronouns
-        if pos_tags.pronoun(normalized_pos) or pronouns.all_pronouns(normalized_form):
+        if pos_tags.pronoun(normalized_pos) or pronouns.all(normalized_form):
             if pronouns.inanimate(normalized_form):
                 return INANIMATE
             elif pronouns.animate(normalized_form):

@@ -9,7 +9,7 @@ common:
     - experiments/extractors/candidate_bf.yaml
     - experiments/extractors/mention_bf.yaml
     - experiments/catchers/pack_permissives.yaml
-    - experiments/features/elliptic.yaml
+    - experiments/features/spanish.yaml
     - experiments/filters/SameHeadCONLL.yaml
     - experiments/filters/Relative.yaml
     - experiments/purges/APPOSITIVE.yaml

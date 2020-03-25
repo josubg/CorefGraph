@@ -463,7 +463,7 @@ class Sieve(object):
         :param mention: The mention to check.
         """
         return (mention.get(MENTION) == PRONOUN_MENTION) or \
-            pronouns.all_pronouns(mention[FORM])
+            pronouns.all(mention[FORM])
 
     @staticmethod
     def is_undefined(mention):

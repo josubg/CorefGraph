@@ -12,7 +12,7 @@ common:
     - experiments/filters/Relative.yaml
     - experiments/extractors/candidate_bf.yaml
     - experiments/extractors/mention_bf.yaml
-    - experiments/features/elliptic.yaml
+    - experiments/features/spanish.yaml
     - experiments/purges/APPOSITIVE.yaml
     - experiments/purges/PREDICATIVE.yaml
     - experiments/purges/SINGLETON.yaml

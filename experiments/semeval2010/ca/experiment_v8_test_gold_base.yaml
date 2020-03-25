@@ -1,0 +1,20 @@
+directory: ../../semeval2010/task01.posttask.v1.0/corpora/test/ca/gold
+extension: naf
+evaluate: True
+report: True
+jobs: 15
+series_name: semeval_ca_gold_base
+common:
+    - experiments/semeval2010/config/corpus/ca_test.yaml
+    - experiments/semeval2010/config/v8.yaml
+    - experiments/common/catchers/gold.yaml
+    - experiments/common/filters/NO.yaml
+    - experiments/common/extractors/candidate_bfcs.yaml
+    - experiments/common/extractors/mention_bf.yaml
+    - experiments/common/features/base.yaml
+    - experiments/common/purges/NO.yaml
+config:
+    -[experiments/common/sieves/all.yaml , "base"]
+
+
+

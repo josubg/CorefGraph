@@ -81,6 +81,6 @@ third_person = list_checker(("he", "him", "himself", "his", "she", "her", "herse
                 "themselves"))
 _others = list_checker(("who", "whom", "whose", "where", "when", "which"))
 
-all_pronouns = lambda x: first_person(x) or second_person(x) or third_person(x) or _others(x)
+all = lambda x: first_person(x) or second_person(x) or third_person(x) or _others(x)
 
 pleonastic = equality_checker("it")

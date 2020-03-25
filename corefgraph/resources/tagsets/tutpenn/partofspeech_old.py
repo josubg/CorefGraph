@@ -76,8 +76,8 @@ mention_pronoun = lambda x: relative_pronoun(x) or personal_pronoun(x)
 
 singular_common_noun = equality_checker(_noun)
 plural_common_noun = equality_checker(_noun_plural)
-proper_nouns = list_checker((_proper_noun, _proper_noun_plural))
-noun = lambda x: singular_common_noun(x) or plural_common_noun(x) or proper_nouns(x)
+proper_noun = list_checker((_proper_noun, _proper_noun_plural))
+noun = lambda x: singular_common_noun(x) or plural_common_noun(x) or proper_noun(x)
 
 verbs = list_checker(_verbs_list)
 modals = equality_checker(_modal)

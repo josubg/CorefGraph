@@ -306,7 +306,7 @@ def is_bare_np(graph_builder, constituent):
         logger.warning("Multisentence entity %s", constituent[ID])
         return False
 
-    if pronouns.all_pronouns(head_form) or pos_tags.pronoun(head_word_pos):
+    if pronouns.all(head_form) or pos_tags.pronoun(head_word_pos):
         return False
 
     if pos_tags.singular_common_noun(head_word_pos) and \
