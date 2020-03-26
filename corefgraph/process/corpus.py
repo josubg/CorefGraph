@@ -327,9 +327,9 @@ def generate_report(path, metrics):
             evaluation = evaluation_file.read()
 
             if metric == "MD":
-                line, r_index, p_index, f1_index = -3, -4, -3, -2
-            else:
                 line, r_index, p_index, f1_index = -5, -4, -3, -2
+            else:
+                line, r_index, p_index, f1_index = -3, -4, -3, -2
             tokens = evaluation.split("\n")[line].split("%")
             results[metric, "R"] = float(tokens[r_index].split(" ")[-1])
             results[metric, "P"] = float(tokens[p_index].split(" ")[-1])
