@@ -1,12 +1,12 @@
-directory: ../resources/semeval2010/test/ca/auto
+directory: ../resources/semeval2010/corpora/test/ca/auto
 extension: naf
 evaluate: True
 report: True
-jobs:
+jobs: 6
 series_name: semeval_ca_predicted_base
 common:
-    - experiments/semeval2010/corpus/ca_test.yaml
-    - experiments/semeval2010/evaluation/v8.yaml
+    - experiments/semeval2010/config/corpus/ca_test.yaml
+    - experiments/semeval2010/config/evaluation/v8.yaml
     - experiments/common/extractors/candidate_bfcs.yaml
     - experiments/common/extractors/mention_bf.yaml
     - experiments/common/catchers/pack_classic.yaml
@@ -18,5 +18,5 @@ common:
     - experiments/common/purges/PREDICATIVE.yaml
 config:
     - [experiments/common/sieves/all.yaml, "#Base"]
-    - [experiments/common/sieves/all_unreliable_head_semeval_rules.yaml, "#Unreliable head rules"]
-    - [experiments/common/sieves/all_unreliable_head_semeval.yaml, "#Unreliable head rules"]
+    - [experiments/common/sieves/all_unreliable_head_semeval_rules.yaml, "#Base Unreliable head rules"]
+    - [experiments/common/sieves/all_unreliable_head_semeval.yaml, "#Base Unreliable head rules"]

@@ -193,7 +193,7 @@ def file_processor(file_name, config):
     if statistic:
 
         meta_dir = os.path.join(config.meta_base, friendly_name)
-        meta_file = os.path.join(meta_dir,"meta.json")
+        meta_file = os.path.join(meta_dir, name + ".json")
         try:
             os.makedirs(meta_dir)
         except OSError:

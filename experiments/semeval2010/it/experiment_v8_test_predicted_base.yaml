@@ -3,13 +3,13 @@ extension: naf
 evaluate: True
 report: True
 jobs: 7
-series_name: "semeval it predicted final"
+series_name: "semeval it predicted base"
 common:
     - experiments/semeval2010/config/corpus/it_test_ud.yaml
     - experiments/semeval2010/config/evaluation/v8.yaml
-    - experiments/common/extractors/candidate_bf.yaml
+    - experiments/common/extractors/candidate_bfcs.yaml
     - experiments/common/extractors/mention_bf.yaml
-    - experiments/common/catchers/pack_permissives.yaml
+    - experiments/common/catchers/pack_classic.yaml
     - experiments/common/features/base.yaml
     - experiments/common/filters/BareNP.yaml
     - experiments/common/filters/SameHeadCONLL.yaml
@@ -17,4 +17,6 @@ common:
     - experiments/common/purges/APPOSITIVE.yaml
     - experiments/common/purges/PREDICATIVE.yaml
 config:
-    - [experiments/common/sieves/all_unreliable_head_semeval_rules.yaml, "#base"]
+    - [experiments/common/sieves/all.yaml, "#base"]
+    - [experiments/common/sieves/all_unreliable_head_semeval_rules.yaml, "#Unreliable head plus rules"]
+    - [experiments/common/sieves/all_unreliable_head_semeval.yaml, "#Unrealiable head" ]

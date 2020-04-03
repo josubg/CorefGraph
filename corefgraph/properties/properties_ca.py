@@ -25,7 +25,7 @@ __author__ = 'Josu Bermudez <josu.bermudez@deusto.es>'
 
 lang = "ca"
 
-pos_tag_set = "universal_dependencies"
-constituent_tag_set = "universal_dependencies"
+pos_tag_set = "semeval_es"
+constituent_tag_set = "semeval_es"
 dep_tag_set = "semeval_es"
 ner_tag_set = "semeval_es"
