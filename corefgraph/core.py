@@ -100,7 +100,6 @@ class Corefgraph:
         for sentence_root in sentence_roots:
             self.coreference_processor.process_sentence(sentence=sentence_root)
 
-
     def process_graph(self):
         """ Prepare the graph for output.
         """

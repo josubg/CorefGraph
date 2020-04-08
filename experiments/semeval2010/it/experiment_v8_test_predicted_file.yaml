@@ -1,4 +1,4 @@
-directory: ../resources/semeval2010/corpora/test/it/auto
+file: ../resources/semeval2010/corpora/test/it/auto/wp_0087.naf
 extension: naf
 evaluate: True
 report: True

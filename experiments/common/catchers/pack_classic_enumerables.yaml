@@ -1,2 +1,2 @@
-mention_catchers: [NamedEntitiesCatcher, ConstituentCatcher, PronounCatcher, EnumerableCatcher]
+mention_catchers: [PronounCatcher, NamedEntitiesCatcher, ConstituentCatcher, EnumerableCatcher]
 result: CatchersClassicEnumerables

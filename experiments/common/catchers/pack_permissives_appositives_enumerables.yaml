@@ -1,2 +1,2 @@
-mention_catchers: [NamedEntitiesCatcher, PermissivePronounCatcher, PermissiveConstituentCatcher, PermissiveEnumerableCatcher, AppositiveCatcher]
+mention_catchers: [PermissivePronounCatcher, NamedEntitiesCatcher, PermissiveConstituentCatcher, PermissiveEnumerableCatcher, AppositiveCatcher]
 result: CatchersPermissiveAppositiveEnumerable
