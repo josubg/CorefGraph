@@ -16,12 +16,9 @@ common:
     - experiments/common/purges/APPOSITIVE.yaml
     - experiments/common/purges/PREDICATIVE.yaml
     - experiments/common/sieves/all_unreliable_head_semeval_rules.yaml
+    - experiments/common/catchers/pack_classic.yaml
 config:
-    - [experiments/common/catchers/pack_classic.yaml, "#Classic catchers" ]
-    - [experiments/common/catchers/pack_classic_appositives.yaml, "#Classic + appositive catchers" ]
-    - [experiments/common/catchers/pack_classic_enumerables.yaml, "#Classic + appositive catchers" ]
-    - [experiments/common/catchers/pack_classic_enumerables_appositives.yaml, "#Classic + enumerables + appositive catchers" ]
-    - [experiments/common/catchers/pack_permissives.yaml, "#permissives catchers" ]
-    - [experiments/common/catchers/pack_permissives_appositives.yaml, "#permissives + appositive catchers" ]
-    - [experiments/common/catchers/pack_permissives_enumerables.yaml, "#permissives + appositive catchers" ]
-    - [experiments/common/catchers/pack_permissives_appositives_enumerables.yaml, "#permissives + enumerables + appositive catchers" ]
+    - ["#Base"]
+    - [experiments/common/filters/relaxed_filters.yaml, "#Relaxed filter"]
+    - [experiments/common/filters/relaxed_purges.yaml, "#Relaxed purges"]
+    - [experiments/common/filters/relaxed_filters.yaml, experiments/common/filters/relaxed_purges"#Relaxed filters and purges]

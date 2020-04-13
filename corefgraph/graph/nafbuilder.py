@@ -8,14 +8,14 @@ from collections import defaultdict, deque
 from operator import itemgetter
 from pynaf import NAFDocument, KAFDocument
 
-from corefgraph.multisieve.features.constants import SPEAKER
+
 from corefgraph.graph.builder import BaseGraphBuilder
 from corefgraph.graph.wrapper import GraphWrapper
 from corefgraph.resources import tree
 from corefgraph.resources.dictionaries import stopwords
 from corefgraph.resources.tagset import constituent_tags
 from corefgraph.constants import POS, NER, TAG, SPAN, FORM, ID, SENTENCE, QUOTED, PREV_SPEAKER, \
-    UTTERANCE, TREE, HEAD_OF_NER, GOLD, SINGLETON
+    UTTERANCE, TREE, HEAD_OF_NER, GOLD, SINGLETON, SPEAKER
 
 __author__ = 'Josu Bermudez <josu.bermudez@deusto.es>'
 

@@ -2,7 +2,7 @@
 """ Annotate the mentions with gender. Available values are UNKNOWN, MALE and
 FEMALE from feature.constants module.
 
-This module can use POS, NER and dictionaries from resources.
+This module can use POS, NER and dictionaries from corefgraph.resources.
 
 """
 

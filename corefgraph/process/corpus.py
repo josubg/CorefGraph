@@ -5,13 +5,10 @@
 
 import sys
 import os
-import re
 import json
 import configargparse
 import codecs
 import logging.config
-import datetime
-import collections
 import logging
 
 try:

@@ -2,8 +2,9 @@
 """ Catcher for retrieve constituent mentions for the system."""
 
 from .baseCatcher import BaseCatcher
+
 from corefgraph.resources.tagset import constituent_tags
-from corefgraph.constants import TAG, FORM, SPAN
+from corefgraph.constants import TAG, FORM
 
 __author__ = "Josu Bermudez <josu.bermudez@deusto.es>"
 

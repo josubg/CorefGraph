@@ -12,7 +12,7 @@ import sys
 import codecs
 import time
 import configargparse as argparse
-from corefgraph import properties, __version__ as version
+from corefgraph import properties
 
 __author__ = 'Josu Bermúdez <josu.bermudez@deusto.es>, ' \
              'Rodrigo Agerri <rodrigo.agerri@ehu.es>'
@@ -36,8 +36,8 @@ def process(config, text, parse_tree, speakers_list, output):
     # This is used to spread the language all over the module
     logger.info("Setting language to %s", config.language)
     properties.set_lang(config.language, config.encoding)
+    from corefgraph import Corefgraph
 
-    from corefgraph.core import Corefgraph
     # End of voodoo
 
     meta_parameters(config)
@@ -206,13 +206,11 @@ def generate_parser():
     parser.add_argument(
         "--mention_extractor", dest="mention_extractor",
         default="DFE",
-        help="The extractor that collect mentions from the text"
-    )
+        help="The extractor that collect mentions from the text")
     parser.add_argument(
         "--candidate_extractor", dest="candidate_extractor",
         default="BFE",
-        help="The extractor that collect candidates from the text"
-    )
+        help="The extractor that collect candidates from the text")
     parser.add_argument(
         '--mention_catchers', dest='mention_catchers',  action="append",
         default=[],
