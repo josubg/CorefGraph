@@ -6,7 +6,7 @@
 from collections import Counter
 from logging import getLogger
 
-from corefgraph.constants import SPAN, ID, FORM, UTTERANCE, POS, NER, SPEAKER, CONSTITUENT, TAG, GOLD
+from corefgraph.constants import SPAN, ID, FORM, UTTERANCE, POS, NER, SPEAKER, CONSTITUENT, TAG, GOLD, INVALID
 from corefgraph.resources.dictionaries import pronouns, stopwords
 from corefgraph.resources.rules import rules
 from corefgraph.resources.tagset import ner_tags, constituent_tags
@@ -77,7 +77,6 @@ class Sieve(object):
         :param candidates_order: A list sentences that are a list of mentions in BFS.
         :param mentions_order: A list sentences that are a list of mentions in textual order.
         """
-        STOP = 'nter439'
         self.graph_builder = graph_builder
         output_clusters = dict()
         self.logger.info(
@@ -161,7 +160,7 @@ class Sieve(object):
         :param entity: The entity that is going to be evaluated.
         """
         self.meta["asked"] += 1
-        if mention.get("invalid") or candidate.get("invalid"):
+        if mention.get(INVALID) or candidate.get(INVALID):
             return False
         if self.USE_INCOMPATIBLES:
             for c_mention in candidate_entity:

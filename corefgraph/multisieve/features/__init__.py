@@ -12,7 +12,7 @@ from collections import defaultdict, Counter
 from pkgutil import iter_modules
 
 from baseannotator import FeatureAnnotator
-from corefgraph.constants import ID
+from corefgraph.constants import ID, POS, TAG
 
 __author__ = 'Josu Bermúdez <josu.bermudez@deusto.es>'
 
@@ -71,6 +71,9 @@ class FeatureExtractor:
                     feature_value = feature_value
                 if self.meta_info:
                     self.add_meta(feature, feature_value, mention)
+            if self.meta_info:
+                self.add_meta(POS, mention.get(POS, None), mention)
+                self.add_meta(TAG, mention.get(TAG, None), mention)
 
     def add_meta(self, feature, feature_value, mention):
         self.meta['mentions'][mention[ID]][feature] = feature_value

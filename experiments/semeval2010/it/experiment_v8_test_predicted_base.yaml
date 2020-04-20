@@ -16,9 +16,9 @@ common:
     - experiments/common/purges/APPOSITIVE.yaml
     - experiments/common/purges/PREDICATIVE.yaml
     - experiments/common/sieves/all_unreliable_head_semeval_rules.yaml
-    - experiments/common/catchers/pack_classic.yaml
 config:
-    - ["#Base"]
-    - [experiments/common/filters/relaxed_filters.yaml, "#Relaxed filter"]
-    - [experiments/common/filters/relaxed_purges.yaml, "#Relaxed purges"]
-    - [experiments/common/filters/relaxed_filters.yaml, experiments/common/filters/relaxed_purges"#Relaxed filters and purges]
+    - [experiments/common/catchers/pack_classic.yaml,"#Base"]
+    - [experiments/common/catchers/pack_classic.yaml,experiments/common/filters/relaxed_filters.yaml, "#Relaxed filter"]
+    - [experiments/common/catchers/pack_classic.yaml,experiments/common/filters/relaxed_purges.yaml, "#Relaxed purges"]
+    - [experiments/common/catchers/pack_classic.yaml,experiments/common/filters/relaxed_filters.yaml, experiments/common/filters/relaxed_purges", "#Relaxed filters and purges"]
+    - [experiments/common/catchers/named_entities.yaml,experiments/common/filters/relaxed_filters.yaml, experiments/common/filters/relaxed_purges",  "#Relaxed filters and purges"]

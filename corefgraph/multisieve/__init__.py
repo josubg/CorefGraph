@@ -217,7 +217,7 @@ class CoreferenceProcessor:
                 "WRONG": {
                     name: {span: mention[ID] for (span, mention) in purge.items()} for name, purge in self.wrong_purged.items()},
                 "LOST": {
-                    span: mention[ID] for (span, mention) in self.lost_purged.items()},
+                    "all": {span: mention[ID] for (span, mention) in self.lost_purged.items()}},
                 "NO": {
                     span: mention[ID] for (span, mention) in self.not_purged.items()}
             }

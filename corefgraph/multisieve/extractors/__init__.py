@@ -14,7 +14,7 @@ from logging import getLogger
 from pkgutil import iter_modules
 
 from corefgraph.constants import ID, SPAN, FORM, POS, TAG, GOLD, CONSTITUENT_ALIGN, CONSTITUENT, UTTERANCE, QUOTED, HEAD_OF_NER, \
-    NER
+    NER, INVALID
 from corefgraph.multisieve.catchers import catchers_by_name
 from corefgraph.multisieve.filters import filters_by_name
 from corefgraph.resources.rules import rules
@@ -243,7 +243,7 @@ class SentenceCandidateExtractor:
                 # If soft filter is activated the mention is only marked as invalid
                 if self.soft_filter:
                     # Not filter but mark as invalid.
-                    mention_candidate["invalid"] = True
+                    mention_candidate[INVALID] = True
                     return False
                 # candidate is filtered
                 return True
@@ -595,7 +595,7 @@ class SentenceCandidateExtractor:
                     name: {span: mention[ID] for (span, mention) in catcher.items()}
                     for name, catcher in self._wrong_caught.items()},
                 "LOST": {
-                    span: mention[ID] for (span, mention) in self._lost_caught.items()},
+                    "all": {span: mention[ID] for (span, mention) in self._lost_caught.items()}},
                 # "NO": self._no_caught,
                 },
             "filters": {
@@ -606,9 +606,9 @@ class SentenceCandidateExtractor:
                     name: {span: mention[ID] for (span, mention) in _filter.items()}
                     for name, _filter in self._wrong_filtered.items()},
                 "LOST": {
-                    span: mention[ID] for (span, mention) in self._lost_filtered.items()},
+                     "all": {span: mention[ID] for (span, mention) in self._lost_filtered.items()}},
                 "NO": {
-                    span: mention[ID] for (span, mention) in self._no_filtered.items()},
+                     "all": {span: mention[ID] for (span, mention) in self._no_filtered.items()}},
                 "SOFT_FILTER": self.soft_filter,
             },
         }

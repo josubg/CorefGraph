@@ -75,10 +75,10 @@ def generate_parser():
                         action='store', default=None,
                         help="CSV file with results to compare.'")
     parser.add_argument('--gold_ext', dest='golden_ext',
-                        action='store', default="conll",
+                        action='store', default=".conll",
                         help="The golden files extension.")
     parser.add_argument('--output_ext', dest='output_ext',
-                        action='store', default="conll",
+                        action='store', default=".conll",
                         help="The output files extension.")
     parser.add_argument('--log_base', dest='log_base',
                         action='store', default="./log/",
@@ -133,7 +133,7 @@ def file_processor(file_name, config):
 
     # Redirect logger to file
     formatter = logger.handlers[0].formatter
-    file_handler = logging.FileHandler(filename=log_file , mode="w")
+    file_handler = logging.FileHandler(filename=log_file, mode="w")
     file_handler.setFormatter(formatter)
     for logger_name in iter(logging.Logger.manager.loggerDict):
         if logger_name.startswith("pycorpus"):
