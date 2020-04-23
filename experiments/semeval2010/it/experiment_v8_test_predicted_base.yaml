@@ -20,5 +20,5 @@ config:
     - [experiments/common/catchers/pack_classic.yaml,"#Base"]
     - [experiments/common/catchers/pack_classic.yaml,experiments/common/filters/relaxed_filters.yaml, "#Relaxed filter"]
     - [experiments/common/catchers/pack_classic.yaml,experiments/common/filters/relaxed_purges.yaml, "#Relaxed purges"]
-    - [experiments/common/catchers/pack_classic.yaml,experiments/common/filters/relaxed_filters.yaml, experiments/common/filters/relaxed_purges", "#Relaxed filters and purges"]
-    - [experiments/common/catchers/named_entities.yaml,experiments/common/filters/relaxed_filters.yaml, experiments/common/filters/relaxed_purges",  "#Relaxed filters and purges"]
+    - [experiments/common/catchers/pack_classic.yaml,experiments/common/filters/relaxed_filters_purges.yaml, "#Relaxed filters and purges"]
+    - [experiments/common/catchers/named_entities.yaml,experiments/common/filters/relaxed_filters_purges.yaml, "#Relaxed filters and purges"]
