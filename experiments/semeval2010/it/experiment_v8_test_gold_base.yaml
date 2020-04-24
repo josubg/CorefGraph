@@ -1,9 +1,9 @@
-file: ../resources/semeval2010/corpora/test/it/auto/wp_0087.naf
+directory: ../resources/semeval2010/corpora/test/it/auto
 extension: naf
 evaluate: True
 report: True
-jobs: 1
-series_name: "semeval it predicted base"
+jobs: 7
+series_name: "semeval it gold base"
 common:
     - experiments/semeval2010/config/corpus/it_test_ud.yaml
     - experiments/semeval2010/config/evaluation/v8.yaml

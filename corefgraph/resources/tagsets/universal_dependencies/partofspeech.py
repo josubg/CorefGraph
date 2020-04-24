@@ -1,7 +1,7 @@
 # coding=utf-8
 from corefgraph.resources.lambdas import equality_checker, matcher, fail
 
-__author__ = 'Valeria Quochi <valeria.quochi@ilc.cnr.it>'
+__author__ = ''
 
 
 # Features questions
@@ -37,7 +37,7 @@ noun = matcher("^PROPN|^NOUN")
 verb = matcher("^VERB")
 modal = equality_checker("^AUX")
 mod_forms = lambda x: common_noun(x) or adjective(x) or verb(x) or cardinal(x)
-indefinites= fail()
+indefinites = fail()
 
 # Enumerations
 enumerable_mention_words = noun
