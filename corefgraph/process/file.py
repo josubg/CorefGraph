@@ -21,6 +21,10 @@ __author__ = 'Josu Bermúdez <josu.bermudez@deusto.es>, ' \
 logger = logging.getLogger(__name__)
 
 
+def flat_option(options):
+    return [x for x in options if isinstance(x, str)] + [y for x in options if not isinstance(x, str) for y in x]
+
+
 def process(config, text, parse_tree, speakers_list, output):
     """Process a document through the corefgraph system.info
 
@@ -45,14 +49,14 @@ def process(config, text, parse_tree, speakers_list, output):
     processor = Corefgraph(
         verbose=config.verbose, reader=config.reader,
         secure_tree=config.secure_tree, lang=config.language,
-        sieves=config.sieves,
-        extractor_options=config.extractor_options,
+        sieves=flat_option(config.sieves),
+        extractor_options=flat_option(config.extractor_options),
         mention_extractor=config.mention_extractor,
         candidate_extractor=config.candidate_extractor,
-        mention_catchers=config.mention_catchers,
-        mention_filters=config.mention_filters,
-        mention_purges=config.mention_purges,
-        mention_features=config.mention_features,
+        mention_catchers=flat_option(config.mention_catchers),
+        mention_filters=flat_option(config.mention_filters),
+        mention_purges=flat_option(config.mention_purges),
+        mention_features=flat_option(config.mention_features),
         meta_info=config.meta
     )
 

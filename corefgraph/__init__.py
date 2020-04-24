@@ -31,11 +31,12 @@ class Corefgraph:
                  mention_filters, mention_features, mention_purges, meta_info):
         self.verbose = verbose
         self.logger = logging.getLogger(__name__)
-        self.logger.info("Extractor Options %s", extractor_options)
+
         # Options
         self.lang = lang
         self.sieves = sieves
         self.extractor_options = extractor_options
+        self.logger.info("Extractor Options %s", self.extractor_options)
         self.mention_extractor = mention_extractor
         self.candidate_extractor = candidate_extractor
         self.mention_catchers = mention_catchers

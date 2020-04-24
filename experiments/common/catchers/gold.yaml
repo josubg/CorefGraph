@@ -1,2 +1,3 @@
 mention_catchers: GoldCatcher
+extractor_options: GOLD_BOUNDARIES
 result: GoldMentions
