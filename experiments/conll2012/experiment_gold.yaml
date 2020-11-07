@@ -1,0 +1,17 @@
+directory: ../resources/conll2012/corpus/key/gold/data/english/annotations
+extension: naf_stanford_sem
+evaluate: True
+report: True
+jobs: 15
+series_name: "conll2012 en gold"
+# Common config for all experiments
+common:
+    - experiments/conll2012/corpus_test.yaml
+    - experiments/conll2012/evaluation_gold_v8.yaml
+    - experiments/common/extractors/candidate_df.yaml
+    - experiments/common/extractors/mention_bf.yaml
+    - experiments/common/catchers/gold.yaml
+    - experiments/common/features/base.yaml
+    - experiments/common/sieves/10.yaml
+config:
+    - ["#final"]

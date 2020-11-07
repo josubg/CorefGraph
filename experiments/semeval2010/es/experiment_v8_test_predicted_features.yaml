@@ -2,21 +2,23 @@ directory: ../resources/semeval2010/corpora/test/es/auto
 extension: naf
 evaluate: True
 report: True
-jobs: 7
-series_name: "semeval es predicted base"
+jobs: 14
+series_name: "semeval es predicted features"
 common:
     - experiments/semeval2010/config/corpus/es_test.yaml
     - experiments/semeval2010/config/evaluation/v8.yaml
-    - experiments/common/extractors/candidate_bfcs.yaml
     - experiments/common/extractors/mention_bf.yaml
-    - experiments/common/catchers/pack_classic.yaml
-    - experiments/common/features/base.yaml
+    - experiments/common/extractors/candidate_bfp.yaml
+    - experiments/common/catchers/pack_permissives.yaml
     - experiments/common/filters/BareNP.yaml
     - experiments/common/filters/SameHeadCONLL.yaml
     - experiments/common/filters/Relative.yaml
     - experiments/common/purges/APPOSITIVE.yaml
     - experiments/common/purges/PREDICATIVE.yaml
+    - experiments/common/sieves/all_unreliable_head_semeval_rules.yaml
+
 config:
-    - [experiments/common/sieves/all.yaml, "#classic Sieves"]
-    - [experiments/common/sieves/all_unreliable_head_semeval.yaml, "#unreliable head sieves"]
-    - [experiments/common/sieves/all_unreliable_head_semeval_rules.yaml, "#unreliable head Sieves + rules"]
+    - [experiments/common/features/base.yaml, "#Base"]
+    - [experiments/common/features/elliptic.yaml, "#Elliptic"]
+    - [experiments/common/features/multiword.yaml, "#Multiword"]
+    - [experiments/common/features/spanish.yaml, "#Spanish"]

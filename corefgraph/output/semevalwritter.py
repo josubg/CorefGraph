@@ -132,12 +132,13 @@ class SemevalCONLLDocument(SemevalDocument):
             # For each ner word assign ner value
             # and mark start and end with '(' and ')'
             words = graph_builder.get_words(ner)
-            ner = ner.get(NER, "O")
-            if len(words) > 1:
-                words[0][NER] = words[0].get(NER, "") + "(" + ner
-                words[-1][NER] = words[-1].get(NER, "") + ner + ")"
-            else:
-                words[0][NER] = words[0].get(NER, "") + "(" + ner + ")"
+            ner = ner.get(NER, False)
+            if ner:
+                if len(words) > 1:
+                    words[0][NER] = words[0].get(NER, "") + "(" + ner
+                    words[-1][NER] = words[-1].get(NER, "") + ner + ")"
+                else:
+                    words[0][NER] = words[0].get(NER, "") + "(" + ner + ")"
 
     def _word_to_conll(self,word, word_id):
         """A word in ConLL is represented with a line of text that is composed by a list of features separated by tabs.

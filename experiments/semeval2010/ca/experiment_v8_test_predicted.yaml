@@ -1,0 +1,28 @@
+directory: ../resources/semeval2010/corpora/test/ca/auto
+extension: naf
+evaluate: True
+report: True
+jobs: 14
+series_name: "semeval ca predicted"
+common:
+    - experiments/semeval2010/config/corpus/ca_test.yaml
+    - experiments/semeval2010/config/evaluation/v8.yaml
+    - experiments/common/extractors/mention_bf.yaml
+    - experiments/common/features/base.yaml
+    - experiments/common/purges/APPOSITIVE.yaml
+    - experiments/common/purges/PREDICATIVE.yaml
+config:
+    -
+        - "#base"
+        - experiments/common/filters/BareNP.yaml
+        - experiments/common/filters/Relative.yaml
+        - experiments/common/catchers/pack_classic.yaml
+        - experiments/common/extractors/candidate_bfcs.yaml
+        - experiments/common/filters/SameHeadCONLL.yaml
+        - experiments/common/sieves/all.yaml
+    -
+        - "#final"
+        - experiments/common/catchers/pack_classic.yaml
+        - experiments/common/extractors/candidate_bfp.yaml
+        - experiments/common/filters/SameHead.yaml
+        - experiments/common/sieves/all_unreliable_head_semeval.yaml

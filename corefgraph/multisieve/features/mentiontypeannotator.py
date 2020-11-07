@@ -6,7 +6,7 @@ from corefgraph.multisieve.features.constants import MENTION, STARTED_BY_INDEFIN
     STARTED_BY_INDEFINITE_PRONOUN, PRONOUN_MENTION, NOMINAL_MENTION, \
     PROPER_MENTION, RELATIVE_PRONOUN, ENUMERATION_MENTION
 
-from corefgraph.constants import POS, FORM, LABEL, HEAD_OF_NER, SPAN
+from corefgraph.constants import POS, FORM, LABEL, HEAD_OF_NER
 from corefgraph.multisieve.features.baseannotator import FeatureAnnotator
 from corefgraph.resources.dictionaries import pronouns, determiners
 from corefgraph.resources.tagset import pos_tags, ner_tags
@@ -66,10 +66,11 @@ class MentionTypeAnnotator(FeatureAnnotator):
         # Pronoun mention
         elif (len(words) == 1 and pos_tags.pronoun(head_pos)) or\
                 (len(words) == 1 and (pronouns.all(head_form) or pronouns.relative(head_form)) and
-                 not ner_tags.mention_ner(head_word_ner)):
+                 # not ner_tags.mention_ner(head_word_ner)):
+                 True):
             self._set_mention_type(mention, PRONOUN_MENTION)
         # Proper Mention
-        elif pos_tags.proper_noun(head_pos) or ner_tags.all(head_word_ner):
+        elif pos_tags.proper_noun(head_pos):# or ner_tags.all(head_word_ner):
             self._set_mention_type(mention, PROPER_MENTION)
         # In other case is nominal
         else:

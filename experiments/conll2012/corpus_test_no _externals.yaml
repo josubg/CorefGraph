@@ -1,4 +1,4 @@
-gold: ../../conll2012/corpus/key/gold/
+gold: ../resources/conll2012/corpus/key/gold/
 language: en_conll
 reader: NAF
 result: no_external

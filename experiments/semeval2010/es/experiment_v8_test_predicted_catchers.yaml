@@ -1,0 +1,29 @@
+directory: ../resources/semeval2010/corpora/test/es/auto
+extension: naf
+evaluate: True
+report: True
+jobs: 14
+series_name: "semeval es predicted Catchers"
+common:
+    - experiments/semeval2010/config/corpus/es_test.yaml
+    - experiments/semeval2010/config/evaluation/v8.yaml
+    - experiments/common/extractors/mention_bf.yaml
+    - experiments/common/extractors/candidate_bfp.yaml
+    - experiments/common/features/spanish.yaml
+    - experiments/common/filters/BareNP.yaml
+    - experiments/common/filters/SameHeadCONLL.yaml
+    - experiments/common/filters/Relative.yaml
+    - experiments/common/purges/APPOSITIVE.yaml
+    - experiments/common/purges/PREDICATIVE.yaml
+    - experiments/common/sieves/all_unreliable_head_semeval_rules.yaml
+
+config:
+    - [experiments/common/catchers/pack_permissives.yaml, "#Permisives"]
+    - [experiments/common/catchers/pack_permissives_appositives.yaml, "#Permisives Appositives"]
+    - [experiments/common/catchers/pack_permissives_enumerables.yaml, "#Permisives Enumerable"]
+    - [experiments/common/catchers/pack_permissives_appositives_enumerables.yaml, "#Permisives Appositives Enumerable"]
+    - [experiments/common/catchers/pack_classic.yaml, "#classic"]
+    - [experiments/common/catchers/pack_classic_appositives.yaml, "#Classic Appositives"]
+    - [experiments/common/catchers/pack_classic_enumerables.yaml, "#Classic Enumerable"]
+    - [experiments/common/catchers/pack_classic_appositives_enumerables.yaml, "#Classic Appositives Enumerable"]
+

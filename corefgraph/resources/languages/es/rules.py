@@ -121,7 +121,7 @@ def is_relative_pronoun(graph_builder, first_constituent, second_constituent):
     :param second_constituent:
     :return: Boolean
     """
-    # NP < (NP=m1 $.. (SBAR < (WHNP < WP|WDT=m2)))
+    # NP=m1 < (NP=m1 $.. (SBAR < (WHNP < WP|WDT=m2)))
     if not graph_builder.same_sentence(
             first_constituent, second_constituent):
         return False
@@ -134,15 +134,15 @@ def is_relative_pronoun(graph_builder, first_constituent, second_constituent):
 
     upper = graph_builder.get_syntactic_parent(second_constituent)
     while upper and (upper[graph_builder.node_type] != graph_builder.root_type):
-        if graph_builder.is_inside(
-                upper[SPAN], enclosing_np[SPAN]):
+        if upper[ID] == first_constituent[ID]:
+            return True
+        elif graph_builder.is_inside(upper[SPAN], enclosing_np[SPAN]):
             upper = graph_builder.get_syntactic_parent(upper)
         elif upper[ID] == enclosing_np[ID]:
             # TODO check path element
             return True
         else:
             return False
-
     return False
 
 
@@ -170,24 +170,24 @@ def is_enumeration(graph_builder,  constituent):
     return False
 
 
-def is_enumeration(graph_builder, mention):
-        """ Check if the mention is an enumeration
-
-        :param mention:  The mention that can be a enumeration.
-
-        :return: True or false
-        """
-        mention_words = graph_builder.get_words(mention)
-        last_comma = 0
-        last_conjuction = 0
-        for index, word in enumerate(mention_words):
-            if word[FORM] == ",":
-                last_comma = index
-            if pos_tags.conjunction(word.get(POS)):
-                last_conjuction = index
-        if last_conjuction and last_conjuction > last_comma:
-            return True
-        return False
+# def is_enumeration(graph_builder, mention):
+#         """ Check if the mention is an enumeration
+#
+#         :param mention:  The mention that can be a enumeration.
+#
+#         :return: True or false
+#         """
+#         mention_words = graph_builder.get_words(mention)
+#         last_comma = 0
+#         last_conjuction = 0
+#         for index, word in enumerate(mention_words):
+#             if word[FORM] == ",":
+#                 last_comma = index
+#             if pos_tags.conjunction(word.get(POS)):
+#                 last_conjuction = index
+#         if last_conjuction and last_conjuction > last_comma:
+#             return True
+#         return False
 
 
 # TODO Check

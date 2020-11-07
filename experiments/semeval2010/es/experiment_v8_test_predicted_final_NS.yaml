@@ -2,7 +2,7 @@ directory: ../resources/semeval2010/corpora/test/es/auto
 extension: naf
 evaluate: True
 report: True
-jobs: 7
+jobs: 15
 series_name: "semeval es predicted final"
 common:
     - experiments/semeval2010/config/evaluation/v8.yaml
@@ -17,5 +17,10 @@ common:
     - experiments/common/purges/PREDICATIVE.yaml
     - experiments/common/sieves/all_unreliable_head_semeval_rules.yaml
 config:
-   - [experiments/semeval2010/config/corpus/es_test_no_singletons.yaml, experiments/common/purges/SINGLETON.yaml, "#no singleton"]
-   - [experiments/semeval2010/config/corpus/es_test.yaml, "#with singletons"]
+    - [ experiments/semeval2010/config/corpus/es_test_no_singletons.yaml, experiments/common/purges/SINGLETON.yaml, "#no singleton"]
+    - [ experiments/semeval2010/config/corpus/es_test.yaml, "#with singletons"]
+    - [ experiments/semeval2010/config/corpus/es_test.yaml,experiments/common/extractors/candidate_bf.yaml,"Mdf Cbf"]
+    - [ experiments/semeval2010/config/corpus/es_test.yaml,experiments/common/extractors/candidate_bfcs.yaml, "Mdf Cbfc"]
+    - [ experiments/semeval2010/config/corpus/es_test.yaml,experiments/common/extractors/candidate_bf.yaml,"Mbf Cbf"]
+    - [ experiments/semeval2010/config/corpus/es_test.yaml,experiments/common/extractors/candidate_bfcs.yaml, "Mbf Cbfc"]
+

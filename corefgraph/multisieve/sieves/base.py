@@ -6,7 +6,7 @@
 from collections import Counter
 from logging import getLogger
 
-from corefgraph.constants import SPAN, ID, FORM, UTTERANCE, POS, NER, SPEAKER, CONSTITUENT, TAG, GOLD, INVALID
+from corefgraph.constants import SPAN, ID, FORM, UTTERANCE, POS, NER, SPEAKER, CONSTITUENT, TAG, INVALID, GOLD_ENTITY
 from corefgraph.resources.dictionaries import pronouns, stopwords
 from corefgraph.resources.rules import rules
 from corefgraph.resources.tagset import ner_tags, constituent_tags
@@ -461,8 +461,7 @@ class Sieve(object):
 
         :param mention: The mention to check.
         """
-        return (mention.get(MENTION) == PRONOUN_MENTION) or \
-            pronouns.all(mention[FORM])
+        return (mention.get(MENTION) == PRONOUN_MENTION) or pronouns.all(mention[FORM])
 
     @staticmethod
     def is_undefined(mention):
@@ -470,8 +469,7 @@ class Sieve(object):
 
         :param mention: The mention to check.
         """
-        return mention[STARTED_BY_INDEFINITE_PRONOUN] or \
-            mention[STARTED_BY_INDEFINITE_ARTICLE]
+        return mention[STARTED_BY_INDEFINITE_PRONOUN] or mention[STARTED_BY_INDEFINITE_ARTICLE]
 
     @staticmethod
     def is_location(mention):
@@ -710,24 +708,16 @@ class Sieve(object):
                             return True
         return False
 
-    @staticmethod
-    def check_gold(mention, candidate):
+    def check_gold(self, mention, candidate):
         """ Check if the link is in the gold Standard.
 
         :param mention: The mention which link want to check.
         :param candidate: The candidate of the link.
         :return: True or False depends of the veracity
         """
-
-        # mention_id = mention.get(SPAN, "")
-        # candidate_id = candidate.get(ID, "")
-        mention_id = mention.get(GOLD, {ID: mention[ID]}).get(ID)
-        candidate_id = candidate.get(GOLD, {ID: candidate[ID]}).get(ID)
-        if "#" not in mention_id or "#" not in candidate_id:
-            return False
-        mention_entity_id = mention_id.split("#")[0]
-        candidate_entity_id = candidate_id.split("#")[0]
-        return mention_entity_id == candidate_entity_id
+        clusters_m = set(m['gold_entity'] for m in self.graph_builder.get_gold_mention_by_span(mention[SPAN]))
+        clusters_c = set(c['gold_entity'] for c in self.graph_builder.get_gold_mention_by_span(candidate[SPAN]))
+        return bool(clusters_c and clusters_m and clusters_c.intersection(clusters_m))
 
     def log_mention(self, mention):
         """ The function that log the mention and all useful info for this sieve
@@ -743,9 +733,7 @@ class Sieve(object):
 
         :param candidate:
         """
-        self.logger.debug(
-            "CANDIDATE -%s- %s",
-            candidate[FORM], candidate[SPAN])
+        self.logger.debug("CANDIDATE -%s- %s", candidate[FORM], candidate[SPAN])
 
     def context(self, mention_entity, mention, candidate_entity, candidate):
         """ Return a Human readable and sieve specific info string of the

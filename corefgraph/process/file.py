@@ -209,11 +209,11 @@ def generate_parser():
         help="The plain name of the sieves that must be used.")
     parser.add_argument(
         "--mention_extractor", dest="mention_extractor",
-        default="DFE",
+        default="deep_first",
         help="The extractor that collect mentions from the text")
     parser.add_argument(
         "--candidate_extractor", dest="candidate_extractor",
-        default="BFE",
+        default="breadth_first",
         help="The extractor that collect candidates from the text")
     parser.add_argument(
         '--mention_catchers', dest='mention_catchers',  action="append",

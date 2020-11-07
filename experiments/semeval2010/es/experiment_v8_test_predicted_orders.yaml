@@ -1,0 +1,28 @@
+directory: ../resources/semeval2010/corpora/test/es/auto
+extension: naf
+evaluate: True
+report: True
+jobs: 15
+series_name: "SemEval es predicted orders"
+common:
+    - experiments/semeval2010/config/corpus/es_test.yaml
+    - experiments/semeval2010/config/evaluation/v8.yaml
+    - experiments/common/catchers/pack_permissives.yaml
+    - experiments/common/features/spanish.yaml
+    - experiments/common/filters/BareNP.yaml
+    - experiments/common/filters/SameHeadCONLL.yaml
+    - experiments/common/filters/Relative.yaml
+    - experiments/common/purges/APPOSITIVE.yaml
+    - experiments/common/purges/PREDICATIVE.yaml
+    - experiments/common/sieves/all_unreliable_head_semeval_rules.yaml
+config:
+    - [ experiments/common/extractors/mention_df.yaml, experiments/common/extractors/candidate_bf.yaml, "#Mdf Cbf"]
+    - [ experiments/common/extractors/mention_df.yaml, experiments/common/extractors/candidate_bfcs.yaml, "#Mdf Cbfc"]
+    - [ experiments/common/extractors/mention_bf.yaml, experiments/common/extractors/candidate_bf.yaml, "#Mbf Cbf"]
+    - [ experiments/common/extractors/mention_bf.yaml, experiments/common/extractors/candidate_bfc.yaml, "#Mbf Cbfc"]
+    - [ experiments/common/extractors/mention_bf.yaml, experiments/common/extractors/candidate_bfs.yaml, "#Mbf Cbfs"]
+    - [ experiments/common/extractors/mention_bf.yaml, experiments/common/extractors/candidate_bfcs.yaml, "#Mbf Cbfsc"]
+    - [ experiments/common/extractors/mention_bf.yaml, experiments/common/extractors/candidate_bfp.yaml, "#Mbf Cbfp"]
+    - [ experiments/common/extractors/mention_bf.yaml, experiments/common/extractors/candidate_bfps.yaml, "#Mbf Cbfsp"]
+    - [ experiments/common/extractors/mention_bfp.yaml, experiments/common/extractors/candidate_bfps.yaml, "#Mbfp Cbfp"]
+    - [ experiments/common/extractors/mention_bfps.yaml, experiments/common/extractors/candidate_bfps.yaml, "#Mbfp Cbfp"]

@@ -20,6 +20,7 @@ class BaseCatcher:
 
     short_name = "base"
     soft_ne = False
+    unique = True
 
     def __init__(self, graph_builder, extractor):
         self.logger = getLogger("{0}.{1}".format(__name__, self.short_name))
@@ -28,6 +29,7 @@ class BaseCatcher:
 
     def catch(self, mention_candidate):
         """Check if the candidate is a valid mention for the system."""
+
         if self._inside_ne(mention_candidate[SPAN]):
             return False
 

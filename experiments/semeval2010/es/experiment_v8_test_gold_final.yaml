@@ -1,18 +1,22 @@
-directory: ../resources/semeval2010/corpora/test/ca/gold
+directory: ../resources/semeval2010/corpora/test/es/gold/
 extension: naf
 evaluate: True
 report: True
 jobs: 15
-series_name: "semeval ca gold"
+series_name: "semeval es gold"
 common:
-    - experiments/semeval2010/config/corpus/ca_test.yaml
+    - experiments/semeval2010/config/corpus/es_test.yaml
     - experiments/semeval2010/config/evaluation/v8.yaml
-    - experiments/common/extractors/candidate_bfcs.yaml
+    - experiments/common/extractors/candidate_bf.yaml
     - experiments/common/extractors/mention_bf.yaml
     - experiments/common/catchers/gold.yaml
     - experiments/common/filters/NO.yaml
     - experiments/common/purges/NO.yaml
     - experiments/common/filters/relaxed_filters_purges.yaml
-    - experiments/common/features/base.yaml
+    - experiments/common/features/spanish.yaml
+    - experiments/common/sieves/all_unreliable_head_semeval_rules.yaml
 config:
-    - [experiments/common/sieves/all.yaml , "#base"]
+    - ["#final"]
+
+
+

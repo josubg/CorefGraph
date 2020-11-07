@@ -5,32 +5,32 @@ __author__ = ''
 
 
 # Features questions
-female = matcher("FEM")
-male = matcher("MASC")
+female = matcher(".*FEM.*")
+male = matcher(".*MASC*")
 neutral = fail()
 
-singular = equality_checker("SING")
-plural = equality_checker("PLUR")
+singular = matcher(".*SING.*")
+plural = matcher(".*PLUR.*")
 
 animate = fail()
 inanimate = fail()
 
 # Adjectives
-adjective = matcher("^ADJ")
+adjective = matcher("^ADJ.*")
 
 
 # Pronouns
 pronoun = matcher("^PRON.*")
-personal_pronoun = matcher("^PRON.*PRS")
-relative_pronoun = matcher("^PRON.*REL")
-interrogative_pronoun = matcher("^PRON.*INT")
+personal_pronoun = matcher("^PRON.*PRS.*")
+relative_pronoun = matcher("^PRON.*REL.*")
+interrogative_pronoun = matcher("^PRON.*INT.*")
 mention_pronoun = lambda x: relative_pronoun(x) or personal_pronoun(x)
 
 # Nouns
 singular_common_noun = matcher("^NOUN.*SING.*")
 plural_common_noun = matcher("^NOUN.*PLUR.*")
 common_noun = matcher("^NOUN.*")
-proper_noun = matcher("^PROPN")
+proper_noun = matcher("^PROPN.*")
 noun = matcher("^PROPN|^NOUN")
 
 # Verbs

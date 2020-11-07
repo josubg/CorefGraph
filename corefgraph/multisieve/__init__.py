@@ -112,9 +112,9 @@ class CoreferenceProcessor:
             graph_builder=self.graph_builder,
             mentions_text_order=self.mentions_textual_order,
             mentions_candidate_order=self.mentions_candidate_order)
-        # Get the gold mentions spans
+        # Get the gold mentions spans to store wrong purges in metadata
         gold_mentions = [m[SPAN] for m in self.graph_builder.get_all_gold_mentions()]
-
+        # Purge the system output to match annotation guidelines  and clean useful but bo valid mentions
         indexed_clusters = self.post_process(coreference_proposal, gold_mentions, indexed_clusters)
 
         self.logger.info("Indexed clusters: %d", indexed_clusters)
@@ -165,9 +165,8 @@ class CoreferenceProcessor:
             if purged:
                 purged_mentions.extend([(mention, purge) for mention in clean_mentions])
             else:
-                # Add the entity tho the response
-                self.graph_builder.add_coref_entity(
-                    entity_id="EN{0}".format(index), mentions=clean_mentions)
+                # Add the entity to the response
+                self.graph_builder.add_coref_entity(node_id="EN{0}".format(index), mentions=clean_mentions)
                 # Increment the entity index
                 indexed_clusters += 1
                 # Store the meta

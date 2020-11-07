@@ -94,54 +94,57 @@ class GraphWrapper:
         graph.graph[property_name] = value
 
     @classmethod
-    def get_out_neighbour_by_relation_type(cls, graph, node, relation_type, key=False):
+    def get_out_neighbour_by_relation_type(cls, graph, node, relation_type, keys=False):
         """ Return the first out neighbour linked with the type type of relation.
         :param graph: The graph of the search
         :param node: The origin node of the edge
         :param relation_type: The type of the relation
-        :param key: Return the relation keys
+        :param keys: Return the relation keys
         :return: The target node or nothing
         """
-        if key:
-            for source, target, relation in graph.out_edges(node[ID], keys=True):
-                if relation == relation_type:
-                    return graph.node[target], graph[node[ID]][target][relation_type]
+        if keys:
+            for source, target, key in graph.out_edges(node[ID], keys=True):
+                if key == relation_type:
+                    return graph.node[target], graph[node[ID]][target][relation_type].get(
+                        "attr_dict", graph.node[target], graph[node[ID]][target][relation_type])
         else:
-            for source, target, relation in graph.out_edges(node[ID], keys=True):
-                if relation == relation_type:
+            for source, target, key in graph.out_edges(node[ID], keys=True):
+                if key == relation_type:
                     return graph.node[target]
         return None
 
     @classmethod
-    def get_out_neighbours_by_relation_type(cls, graph, node, relation_type, key=False):
+    def get_out_neighbours_by_relation_type(cls, graph, node, relation_type, keys=False):
         """ Return the out neighbours of node linked with a relation of type.
         :param graph: The graph of the search
         :param node: The origin node of the edge
         :param relation_type: The type of the relation
-        :param key: Return the relation keys
+        :param keys: Return the relation keys
         :return: A list of the target nodes or empty list.
         """
-        if key:
-            return [(graph.node[target], graph[node[ID]][target][relation_type])
-                    for source, target, relation in graph.out_edges(node[ID], keys=True)
-                    if relation == relation_type]
+        if keys:
+            return [(graph.node[target], graph[node[ID]][target][relation_type].get(
+                "attr_dict", graph[node[ID]][target][relation_type]))
+                    for source, target, key in graph.out_edges(node[ID], keys=True)
+                    if key == relation_type]
 
-        return [graph.node[target] for source, target, relation in graph.out_edges(node[ID], keys=True)
-                if relation == relation_type]
+        return [graph.node[target] for source, target, key in graph.out_edges(node[ID], keys=True)
+                if key == relation_type]
 
     @classmethod
-    def get_in_neighbour_by_relation_type(cls, graph, node, relation_type, key=False):
+    def get_in_neighbour_by_relation_type(cls, graph, node, relation_type, keys=False):
         """ Return the first in neighbour linked with the type type of relation.
         :param graph: The graph of the search
         :param node: The target node of the edge
         :param relation_type: The type of the relation
-        :param key: Return the relation keys
+        :param keys: Return the relation keys
         :return: The origin node or nothing
         """
-        if key:
+        if keys:
             for source, target, key in graph.in_edges(node[ID], keys=True):
                     if key == relation_type:
-                        return graph.node[source], graph[source][node[ID]][relation_type]
+                        return graph.node[source], graph[source][node[ID]][relation_type].get(
+                            "attr_dict", graph[source][node[ID]][relation_type])
 
         else:
             for source, target, key in graph.in_edges(node[ID], keys=True):
@@ -150,21 +153,22 @@ class GraphWrapper:
         return None
 
     @classmethod
-    def get_in_neighbours_by_relation_type(cls, graph, node, relation_type, key=False):
+    def get_in_neighbours_by_relation_type(cls, graph, node, relation_type, keys=False):
         """ Return the in neighbours of node linked with a relation of type.
         :param graph: The graph of the search
         :param node: The target node of the edge
         :param relation_type: The type of the relation
-        :param key: Return the relation keys
+        :param keys: Return the relation keys
         :return: The origin node or nothing
         """
-        if key:
-            return [(graph.node[source], graph[source][node[ID]][relation_type])
+        if keys:
+            return [(graph.node[source], graph[source][node[ID]][relation_type].get(
+                "attr_dict", graph[source][node[ID]][relation_type]))
                     for source, target, key in graph.in_edges(node[ID], keys=True)
                     if key == relation_type]
 
-        return [graph.node[source] for source, target, key in graph.in_edges(node[ID], keys=True)
-                if key == relation_type]
+        return [graph.node[source] for source, target, relation in graph.in_edges(node[ID], keys=True)
+                if relation == relation_type]
 
     @classmethod
     def get_node_by_id(cls, graph, node_id):

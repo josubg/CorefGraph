@@ -14,7 +14,7 @@ Computational Linguistics 39(4), 2013.
 import logging
 from collections import defaultdict, Counter
 
-from corefgraph.constants import ID
+from corefgraph.constants import ID, POS, NER, TAG, GOLD_ENTITY, DEEP, CONSTITUENT, FORM
 
 __author__ = 'Josu Bermudez <josu.bermudez@deusto.es>, Rodrigo Agerri <rodrigo.agerri@ehu.es>'
 __version__ = '1.1.0'
@@ -82,7 +82,6 @@ class Corefgraph:
         )
 
         self.feature_extractor.load_extractors()
-
         self.meta = defaultdict(Counter)
 
     def build_graph(self, document):
@@ -103,17 +102,30 @@ class Corefgraph:
             self.coreference_processor.process_sentence(sentence=sentence_root)
 
     def process_graph(self):
+        from corefgraph.multisieve.features.constants import MENTION
         """ Prepare the graph for output.
         """
         self.meta[self.graph_builder.doc_type] = self.graph_builder.get_doc_type()
-        self.meta["sentences"] = []
+        from resources.tagset import pos_tags
+        from resources.dictionaries import pronouns
+        self.meta["sentences"] = {
+            'words_histogram': [len(self.graph_builder.get_words(sentence))
+                                for sentence in self.graph_builder.get_all_sentences()],
+            'pronouns_histogram': [len([word for word in self.graph_builder.get_words(sentence) if(pos_tags.pronoun(word[POS]) or pronouns.all(word[FORM]) or pronouns.relative(word[FORM]))])
+                                   for sentence in self.graph_builder.get_all_sentences()],
+            'named_entities_histogram': [len(self.graph_builder.get_sentence_named_entities(sentence))
+                                         for sentence in self.graph_builder.get_all_sentences()],
+            'mentions_histogram': [len(self.graph_builder.get_sentence_gold_mentions(sentence))
+                                   for sentence in self.graph_builder.get_all_sentences()]
+        }
+
         self.meta["features"] = {
             'counters': defaultdict(Counter),
             'mentions': defaultdict(dict)}
         for index, sentence in enumerate(self.coreference_processor.mentions_textual_order):
             self.logger.debug("Featuring Sentence %d", index)
             sentence_mentions = []
-            self.meta["sentences"].append(sentence_mentions)
+            # self.meta["sentences"].append(sentence_mentions)
             for mention in sentence:
                 # Store mentions id in the meta
                 sentence_mentions.append(mention[ID])
@@ -121,6 +133,16 @@ class Corefgraph:
         # Resolve the coreference
         self.logger.debug("Resolve Coreference...")
         self.coreference_processor.resolve_text()
+
+        self.meta["overall"] = {
+            'words': Counter([word[POS] for word in self.graph_builder.get_all_words()]),
+            'namedEntities': Counter([ne[NER] for ne in self.graph_builder.get_all_named_entities()]),
+            'constituents': Counter([constituent[TAG] for constituent in self.graph_builder.get_all_constituents()]),
+            'mentions': Counter([mention.get(MENTION) for mention in self.graph_builder.get_all_gold_mentions()]),
+            'mentions_size': [len(self.graph_builder.get_words(mention)) for mention in self.graph_builder.get_all_gold_mentions()],
+            'mentions_deep': [mention.get(CONSTITUENT, {DEEP: -1})[DEEP] for mention in self.graph_builder.get_all_gold_mentions()],
+            'mentions_per_entity': Counter([mention[GOLD_ENTITY] for mention in self.graph_builder.get_all_gold_mentions()]).values()
+        }
 
     def show_graph(self):
         """Show the graph in screen"""

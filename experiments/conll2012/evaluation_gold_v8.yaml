@@ -4,7 +4,6 @@ mention_filters: []
 mention_purges: []
 extractor_options: [probabilistic_gender]
 writer: CONLL
-evaluation_script: ../../conll2012/corpus/scorer/v8.01/launch_scorer.sh
+evaluation_script: ../resources/conll-scorer/v8.01/go.sh
 metrics: [muc, bcub, ceafe, blanc]
 aggregation_metrics: [muc, bcub, ceafe]
-result: gold

@@ -1,4 +1,3 @@
-
 from corefgraph.constants import ID, SPAN, TAG
 from corefgraph.resources.tagset import constituent_tags
 
@@ -24,6 +23,30 @@ class Plain:
             order, ordered_children, validation, named_entities_by_constituent, gold_mentions_by_constituent)
 
 
+class ShallowPreference:
+
+    def __init__(self, graph_builder):
+        self.graph_builder = graph_builder
+
+    def extract(self, order, root, validation, named_entities_by_constituent, gold_mentions_by_constituent):
+        """Extract the validated candidates from the sentence but use restarts search for each root children.
+
+           :param order: A list where put the extracted constituents/Named Entities
+           :param root: The chunk where each element must be traversed.
+           :param validation: The function that validates de constituent.
+           :param named_entities_by_constituent: The named entities ordered by constituent.
+           :param gold_mentions_by_constituent: The gold mentions ordered by constituent.
+           """
+        children = self.graph_builder.get_syntactic_children_sorted(root)
+
+        ordered_children = [c for c in children if constituent_tags.noun_phrase(c.get("tag", ""))] + \
+                           [c for c in children if not constituent_tags.noun_phrase(c.get("tag", ""))]
+
+        # # Visit each constituent in a BFT algorithm
+        self._extract_mentions(
+            order, ordered_children, validation, named_entities_by_constituent, gold_mentions_by_constituent)
+
+
 class Preference:
 
     def __init__(self, graph_builder):
@@ -40,16 +63,16 @@ class Preference:
            """
         children = self.graph_builder.get_syntactic_children_sorted(root)
 
-        ordered_children = [c for c in children if constituent_tags.noun_phrase(c.get("tag",""))]
+        ordered_children = [c for c in children if constituent_tags.noun_phrase(c.get("tag", ""))]
 
         # # Visit each constituent in a BFT algorithm
         self._extract_mentions(
             order, ordered_children, validation, named_entities_by_constituent, gold_mentions_by_constituent)
 
-        ordered_children = [c for c in children if not constituent_tags.noun_phrase(c.get("tag",""))]
+        ordered_children = [c for c in children if not constituent_tags.noun_phrase(c.get("tag", ""))]
 
         self._extract_mentions(
-            order, ordered_children, validation, named_entities_by_constituent)
+            order, ordered_children, validation, named_entities_by_constituent, gold_mentions_by_constituent)
 
 
 class PerChild:
@@ -121,12 +144,14 @@ class Breadth:
                     key=lambda child: child[SPAN])
                 # Add the children to the search
                 nodes.extend(ordered_children)
-        a = 1
 
 
 class Deep:
 
     SUBORDINATE_RESTART = False
+
+    def __init__(self, graph_builder):
+        self.graph_builder = graph_builder
 
     def _extract_mentions(self, order, nodes, validation, named_entities_by_constituent, gold_mentions_by_constituent):
         """The constituent syntax graph is traversed in deep-first order but restart search in subordinates.
@@ -180,6 +205,10 @@ class BreathFistSimple(Plain, Breadth):
 
 class BreathFistPreference(Preference, Breadth):
     name = "breadth_first_preference"
+
+
+class BreathFistShallowPreference(ShallowPreference, Breadth):
+    name = "breadth_first_shallow_preference"
 
 
 class BreadthFirstSubordinate(Plain, Breadth):

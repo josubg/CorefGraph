@@ -68,10 +68,11 @@ class ConllDocument(BaseDocument):
             # For each ner word assign ner value
             # and mark start and end with '(' and ')'
             words = graph_builder.get_words(ner)
-            ner = ner.get(NER, "O")
+            ner_tag = ner.get(NER, "O")
+            ner_tag = ner_tag or "O"
             words[0][NER] = words[0].get(NER, "") + "("
             for word in words:
-                word[NER] = word.get(NER, "") + ner
+                word[NER] = word.get(NER, "") + ner_tag
             words[-1][NER] = words[-1].get(NER, "") + ")"
 
     def _annotate_mentions(self, graph_builder, mentions, cluster_index):
@@ -86,7 +87,8 @@ class ConllDocument(BaseDocument):
                 mention[FORM],
                 " ".join([word["form"] for word in terms])
             )
-            entity_mark = mention.get("entity_id", cluster_index)
+            # entity_mark = mention.get("entity_id", cluster_index)
+            entity_mark = cluster_index
             if terms:
                 if len(terms) == 1:
                     self._mark_coreference(
@@ -129,3 +131,14 @@ class ConllDocument(BaseDocument):
         else:
             features.append("-")
         return "   ".join(features) + "\n"
+
+    @staticmethod
+    def _mark_coreference(word, coreference_string):
+        """ Append to a word a coreference string
+        :param word: The word that forms part of a mention
+        :param coreference_string: The coreference string
+        """
+        if "coreference" not in word:
+            word["coreference"] = [coreference_string]
+        else:
+            word["coreference"].append(coreference_string)

@@ -3,7 +3,7 @@ extension: naf
 evaluate: True
 report: True
 jobs: 15
-series_name: semeval_ca_gold_final
+series_name: semeval ca gold final
 common:
     - experiments/semeval2010/corpus/ca_test.yaml
     - experiments/semeval2010/v8.yaml

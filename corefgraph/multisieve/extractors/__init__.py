@@ -13,8 +13,9 @@ from logging import getLogger
 
 from pkgutil import iter_modules
 
-from corefgraph.constants import ID, SPAN, FORM, POS, TAG, GOLD, CONSTITUENT_ALIGN, CONSTITUENT, UTTERANCE, QUOTED, HEAD_OF_NER, \
-    NER, INVALID
+from corefgraph.constants import ID, SPAN, FORM, POS, TAG, CONSTITUENT_ALIGN, CONSTITUENT, UTTERANCE, QUOTED, \
+    HEAD_OF_NER, \
+    NER, INVALID, DEEP, SINGLETON, GOLD_ENTITY
 from corefgraph.multisieve.catchers import catchers_by_name
 from corefgraph.multisieve.filters import filters_by_name
 from corefgraph.resources.rules import rules
@@ -163,6 +164,9 @@ class SentenceCandidateExtractor:
     def _catch(self, mention_candidate):
         span_str = str(mention_candidate[SPAN])
         for catcher in self.catchers:
+            # If the span is already in the accepted candidates Skip catching the span.
+            if catcher.unique and (mention_candidate[SPAN] in self._sentence_candidates_span):
+                return False
             if catcher.catch(mention_candidate):
                 # Candidate is accepted
                 if self.meta_info:
@@ -203,10 +207,6 @@ class SentenceCandidateExtractor:
 
         :return True if the span is a valid candidate or False otherwise.
         """
-        # If the span is already in the accepted candidates Skip catching the span.
-        if mention_candidate[SPAN] in self._sentence_candidates_span:
-            return False
-
         # Check candidate with each catcher
         if self._catch(mention_candidate):
             if self._filter_candidate(mention_candidate=mention_candidate, prev_mentions=prev_mentions):
@@ -256,8 +256,9 @@ class SentenceCandidateExtractor:
             else:
                 # Candidate is not filtered and is not in Gold response (Good Filtering: True positive)
                 self._no_filtered[span_str] = mention_candidate
-        if mention_candidate[SPAN] in self.gold_entities_spans:
-            mention_candidate[GOLD] = self.gold_mentions_by_span[mention_candidate[SPAN]]
+        # if mention_candidate[SPAN] in self.gold_entities_spans:
+        #     a= 1
+            # mention_candidate[GOLD] = self.gold_mentions_by_span[mention_candidate[SPAN]]
         # candidate is not filtered
         return False
 
@@ -330,7 +331,6 @@ class SentenceCandidateExtractor:
 
         :return A node(constituent) where fit the external to the tree.
         """
-
         constituent = self.graph_builder.get_syntactic_parent(head)
         constituent_head = self.graph_builder.get_head_word(constituent)[ID]
         valid_constituent = head
@@ -393,7 +393,6 @@ class SentenceCandidateExtractor:
             + Add their reference to a list
             + Add their reference by constituent
 
-
         :param sentence: The base node for the sentence named entities.
             usually the root node.
         """
@@ -402,6 +401,7 @@ class SentenceCandidateExtractor:
             # Allocate in the tree
             constituent = self._allocate_into_tree(
                 entity, sentence)
+            entity[DEEP] = constituent[DEEP]
             self.graph_builder.get_head_word(entity)[HEAD_OF_NER] = entity[NER]
             if ner_tags.mention_ner(entity[NER]):
                 entity_span = entity[SPAN]
@@ -426,8 +426,7 @@ class SentenceCandidateExtractor:
             if not self.gold_boundaries:
                 continue
 
-            self.logger.debug(
-                "Gold mention allocation: Start (%s)", gold_mention[FORM])
+            self.logger.debug("Gold mention allocation: Start (%s)", gold_mention[FORM])
             if gold_mention_span in self.named_entities_span:
                 # Fitting NE
                 for name_entity in self.named_entities:
@@ -440,45 +439,40 @@ class SentenceCandidateExtractor:
                             gold_mention,
                             self.graph_builder.get_head_word(name_entity))
                         constituent = name_entity[CONSTITUENT]
-                        gold_mention[CONSTITUENT] = constituent
-                        # Inherit attributes from NE
-                        gold_mention[UTTERANCE] = name_entity[UTTERANCE]
-                        gold_mention[QUOTED] = name_entity[QUOTED]
-                        gold_mention[NER] = name_entity[NER]
-                        gold_mention[self.graph_builder.doc_type] = \
-                            name_entity[self.graph_builder.doc_type]
+                        gold_mention["NE_align"] = "fitted"
                         self.logger.debug("Gold mention allocation: NE paired %s", constituent[FORM])
                         gold_mention[CONSTITUENT_ALIGN] = "NE_" + name_entity[CONSTITUENT_ALIGN]
                         break
                 else:
                     # Apparently something failed, this doesn't happens if NE
                     # load is correct
-                    constituent = self._allocate_into_tree(
-                        gold_mention, sentence)
-                    # if gold_mention[CONSTITUENT_ALIGN] == "fitted":
-                    #     constituent["GOLD"] = gold_mention[ID]
+                    constituent = self._allocate_into_tree(gold_mention, sentence)
                     gold_mention["NE_align"] = "FAIL"
-                    self.logger.warning(
-                        "Gold Mention allocation: NE pairing failed %s", constituent[FORM])
+                    self.logger.warning("Gold Mention allocation: NE pairing failed %s", constituent[FORM])
             else:
                 # Allocate in the tree
-                constituent = self._allocate_into_tree(
-                    gold_mention, sentence)
+                constituent = self._allocate_into_tree(gold_mention, sentence)
                 gold_mention["NE_align"] = False
+                gold_mention[CONSTITUENT_ALIGN] = "fitted" # Thisis not true can be a bad fitting
                 self.logger.debug(
                     "Gold Mention allocation: constituent pairing %s", constituent[FORM])
 
             # Add the mention to registers
+            # self.sentence_gold_mentions_by_constituent[constituent[ID]].append(gold_mention)
+            # constituent["gold_mention"] = gold_mention[ID]
+            # constituent[SINGLETON] = gold_mention[SINGLETON]
+            # constituent[GOLD_ENTITY] = gold_mention[GOLD_ENTITY]
+            # constituent["NE_align"] = gold_mention["NE_align"]
+            # constituent[CONSTITUENT_ALIGN] = gold_mention[CONSTITUENT_ALIGN]
+
             self.sentence_gold_mentions_by_constituent[constituent[ID]].append(gold_mention)
-            constituent["Gold_mention_id"] = gold_mention[ID]
-            constituent["Gold_mention_align"] = gold_mention[CONSTITUENT_ALIGN] == "fitted"
-            # The id of a gold mention is entity_index#mention_index
-            # entity = gold_mention[ID].split("#")[0]
-            # try:
-            #     self.gold_entities[entity].append(gold_mention)
-            # except KeyError:
-            #     self.logger.debug("New Entity: ")
-            #     self.gold_entities[entity] = [gold_mention]
+
+            gold_mention[CONSTITUENT] = constituent
+            gold_mention[UTTERANCE] = constituent[UTTERANCE]
+            gold_mention[QUOTED] = constituent[QUOTED]
+            gold_mention[DEEP] = constituent[DEEP]
+            gold_mention[NER] = constituent.get(NER, None)
+            gold_mention[self.graph_builder.doc_type] = constituent[self.graph_builder.doc_type]
 
     # Sentence extraction entry point
     def process_sentence(self, sentence):

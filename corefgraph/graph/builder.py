@@ -3,13 +3,10 @@
  usable by the system.
 """
 from logging import getLogger
-
-from corefgraph.constants import POS
-
 from corefgraph.resources.rules import rules
 from corefgraph.graph.wrapper import GraphWrapper
 from corefgraph.constants import SPAN, ID, NER, CONSTITUENT,\
-    SENTENCE, LABEL, TAG, LEMMA, FORM, UTTERANCE, QUOTED, BEGIN, END
+    SENTENCE, LABEL, TAG, LEMMA, FORM, UTTERANCE, QUOTED, BEGIN, END, POS, DEEP
 
 
 class BaseGraphBuilder(object):
@@ -100,23 +97,23 @@ class BaseGraphBuilder(object):
 
     # Sentence Related
     def add_sentence(
-            self, root_index, sentence_form, sentence_label, sentence_id):
+            self, root_index, form, label, node_id):
         """ Create a new sentence in the graph. Also link it to the previous
         sentence.
 
         :param root_index: The index of the sentence.
-        :param sentence_form:
-        :param sentence_label:
-        :param sentence_id:
+        :param form:
+        :param label:
+        :param node_id:
         :return: The sentence node
         """
         sentence_root_node = GraphWrapper.new_node(
             # graph=self.graph,
             graph=self.graph,
             node_type=self.root_type,
-            node_id=sentence_id,
-            form="{0}#{1}".format(self.root_label, sentence_form),
-            label="{0}#{1}".format(self.root_label, sentence_label),
+            node_id=node_id,
+            form="{0}#{1}".format(self.root_label, form),
+            label="{0}#{1}".format(self.root_label, label),
             ord=root_index,
             tag=self.root_pos,
             pos=self.root_pos,)
@@ -207,25 +204,25 @@ class BaseGraphBuilder(object):
             key=lambda y: y[SPAN])
 
     # Coreference
-    def add_coref_entity(self, entity_id, mentions, label=None):
+    def add_coref_entity(self, node_id, mentions, label=None):
         """ Creates a entity with the identification provided and link to all
         the mentions passed.
 
         :param label: Optional label for the mention.
         :param mentions: List of mentions that forms the entity.
-        :param entity_id: identifier assigned to the mention.
+        :param node_id: identifier assigned to the mention.
         """
         graph = self.graph
         # Create the node that links all mentions as an entity.
         new_node = GraphWrapper.new_node(graph=graph,
                                          node_type=self.entity_node_type,
-                                         node_id=entity_id,
+                                         node_id=node_id,
                                          label=label
                                          )
         # Mention lis is a list of mention node identifiers
         for mention in mentions:
             GraphWrapper.link(
-                self.graph, entity_id, mention,
+                self.graph, node_id, mention,
                 self.entity_edge_type,
                 label=self.entity_edge_label)
         return new_node
@@ -238,21 +235,25 @@ class BaseGraphBuilder(object):
         return GraphWrapper.get_all_node_by_type(
             graph=self.graph, node_type=self.entity_node_type)
 
-    def add_gold_mention(self, mention_id, entity_id, label):
+    def add_gold_mention(self, node_id, gold_entity, label):
         """Creates a gold mention into the graph.
         :param entity_id:  The ID of the entity.
-        :param mention_id: The ID of the gold mention in the graph
+        :param node_id: The ID of the gold mention in the graph
         :param label: A label for representation uses.
         """
 
         new_entity = GraphWrapper.new_node(
             graph=self.graph,
             node_type=self.gold_mention_node_type,
-            node_id=mention_id,
+            node_id=node_id,
             label=label,
-            entity_id=entity_id
+            gold_entity=gold_entity
         )
         return new_entity
+
+    def get_gold_mention_by_span(self, span):
+        return [gm for gm in GraphWrapper.get_all_node_by_type(
+            graph=self.graph, node_type=self.gold_mention_node_type) if gm[SPAN] == span]
 
     def get_all_gold_mentions(self):
         """ Get all named entities of the graph
@@ -261,6 +262,30 @@ class BaseGraphBuilder(object):
         """
         return GraphWrapper.get_all_node_by_type(
             graph=self.graph, node_type=self.gold_mention_node_type)
+
+    def get_all_named_entities(self):
+        """ Get all named entities of the graph
+
+        :return: A list of named entities
+        """
+        return GraphWrapper.get_all_node_by_type(
+            graph=self.graph, node_type=self.named_entity_node_type)
+
+    def get_all_words(self):
+        """ Get all named entities of the graph
+
+        :return: A list of named entities
+        """
+        return GraphWrapper.get_all_node_by_type(
+            graph=self.graph, node_type=self.word_node_type)
+
+    def get_all_constituents(self):
+        """ Get all named entities of the graph
+
+        :return: A list of named entities
+        """
+        return GraphWrapper.get_all_node_by_type(
+            graph=self.graph, node_type=self.syntactic_node_type)
 
     def add_mention_of_gold_mention(self, sentence, mention):
         """ Add gold mention to a sentence.
@@ -284,15 +309,6 @@ class BaseGraphBuilder(object):
             graph=self.graph, node=root,
             relation_type=self.gold_mention_edge_type),
             key=lambda y: y[SPAN])
-
-    # Named entities
-    def get_all_named_entities(self, ):
-        """ Get all named entities of the graph
-
-        :return: A list of named entities
-        """
-        return GraphWrapper.get_all_node_by_type(
-            graph=self.graph, node_type=self.named_entity_node_type)
 
     def get_all_entity_mentions(self, entity):
         """ Get mentions of a entity
@@ -462,7 +478,7 @@ class BaseGraphBuilder(object):
         """
         children = GraphWrapper.get_out_neighbours_by_relation_type(
             node=word, relation_type=self.dependency_edge_type,
-            graph=self.graph, key=True)
+            graph=self.graph, keys=True)
         return children
 
     def get_governor_words(self, word):
@@ -473,7 +489,7 @@ class BaseGraphBuilder(object):
         """
         children = GraphWrapper.get_in_neighbours_by_relation_type(
             node=word, relation_type=self.dependency_edge_type,
-            graph=self.graph, key=True)
+            graph=self.graph, keys=True)
         return children
 
     # Syntax
@@ -705,29 +721,32 @@ class BaseGraphBuilder(object):
                 break
         return constituent, index
 
-    def fill_constituent(self, constituent):
+    def fill_constituent(self, constituent, deep=0):
         """ Fill the constituent attributes with de data from its children
 
         :param constituent: The constituent to fill
+        :param deep: The deep of the constituent, default 0
 
         :return: Nothing
         """
-        children = self.get_words(constituent)
-        content_text = self._expand_node(children)
+        words = self.get_words(constituent)
+        content_text = self._expand_node(words)
         constituent[LABEL] = self.label_pattern.format(
             content_text, constituent[TAG])
-        constituent[LEMMA] = self._expand_node_lemma(children)
+        constituent[LEMMA] = self._expand_node_lemma(words)
         constituent[FORM] = content_text
-        constituent[BEGIN] = children[0][BEGIN]
-        constituent[END] = children[-1][END]
+        constituent[BEGIN] = words[0][BEGIN]
+        constituent[END] = words[-1][END]
         constituent[SPAN] = (
-            children[0][SPAN][0],
-            children[-1][SPAN][-1]
+            words[0][SPAN][0],
+            words[-1][SPAN][-1]
         )
-        for x in self.get_syntactic_children(constituent):
-            if x[self.node_type] == self.word_node_type:
+        constituent[DEEP] = deep
+        for child in self.get_syntactic_children(constituent):
+            if child[self.node_type] == self.word_node_type:
+                child[DEEP] = deep + 1
                 continue
-            self.fill_constituent(x)
+            self.fill_constituent(child, deep + 1)
         head_word = self.get_head_word(constituent)
         self.set_head_word(constituent, head_word)
         constituent[self.doc_type] = head_word.get(self.doc_type, None)

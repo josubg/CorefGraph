@@ -292,6 +292,7 @@ class RelativePronoun(Sieve):
 
     short_name = "RPC"
     # Filter options
+    IS_INSIDE = False
     ONLY_FIRST_MENTION = False
     USE_INCOMPATIBLES = False
     NO_PRONOUN_MENTION = False

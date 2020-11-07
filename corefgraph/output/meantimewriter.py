@@ -78,7 +78,7 @@ class ConllDocument(BaseDocument):
                 mention[FORM],
                 " ".join([word["form"] for word in terms])
             )
-            entity_mark = cluster_index# mention.get("entity_id", cluster_index)
+            mention.get("entity_id", cluster_index)
             if terms:
                 if len(terms) == 1:
                     self._mark_coreference(

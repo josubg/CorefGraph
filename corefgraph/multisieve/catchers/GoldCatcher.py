@@ -2,7 +2,7 @@
 """ Catcher for retrieve valid constituent mentions for the system."""
 
 from corefgraph.multisieve.catchers.baseCatcher import BaseCatcher
-from corefgraph.constants import GOLD, SINGLETON
+from corefgraph.constants import SINGLETON, GOLD_ENTITY
 
 __author__ = "Josu Bermudez <josu.bermudez@deusto.es>"
 
@@ -13,6 +13,8 @@ class GoldCatcher(BaseCatcher):
     short_name = "GoldCatcher"
 
     soft_ne = True
+
+    unique = False
 
     def __init__(self, graph_builder, extractor):
         BaseCatcher.__init__(self, graph_builder, extractor)
@@ -25,7 +27,7 @@ class GoldCatcher(BaseCatcher):
         :return: True or False.
         """
 
-        return mention_candidate.get(GOLD, False)
+        return mention_candidate.get(GOLD_ENTITY, False)
 
 
 class GoldNSCatcher(BaseCatcher):
@@ -46,4 +48,4 @@ class GoldNSCatcher(BaseCatcher):
         :return: True or False.
         """
 
-        return mention_candidate.get(GOLD, False) and not mention_candidate.get(SINGLETON, False)
+        return mention_candidate.get(GOLD_ENTITY, False) and not mention_candidate.get(SINGLETON, False)

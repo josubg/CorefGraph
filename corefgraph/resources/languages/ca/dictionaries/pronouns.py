@@ -99,5 +99,5 @@ third_person = list_checker(("ell", "ella", "elles", "ells", "la", "les", "li", 
 
 pleonastic = list_checker(("això", "_"))
 
-all = lambda x: first_person(x) or second_person(x) or third_person(x) or  plural(x) or singular(x) or male(x) or\
+all = lambda x: first_person(x) or second_person(x) or third_person(x) or plural(x) or singular(x) or male(x) or\
 				female(x) or neutral(x) or animate(x) or inanimate(x)

@@ -26,5 +26,3 @@ mention_ner = all
 
 # NE types that must be filtered from mention candidates
 no_mention_ner = lambda: False
-
-

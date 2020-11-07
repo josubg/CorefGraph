@@ -15,7 +15,7 @@ from corefgraph.resources import tree
 from corefgraph.resources.dictionaries import stopwords
 from corefgraph.resources.tagset import constituent_tags
 from corefgraph.constants import POS, NER, TAG, SPAN, FORM, ID, SENTENCE, QUOTED, PREV_SPEAKER, \
-    UTTERANCE, TREE, HEAD_OF_NER, GOLD, SINGLETON, SPEAKER
+    UTTERANCE, TREE, HEAD_OF_NER, SINGLETON, SPEAKER
 
 __author__ = 'Josu Bermudez <josu.bermudez@deusto.es>'
 
@@ -281,7 +281,7 @@ class NafAndTreeGraphBuilder(BaseGraphBuilder):
                 # Link words_ids to mention as word
                 for term in entity_terms:
                     self.link_word(entity, term)
-                    #term[HEAD_OF_NER] = entity_type
+                    # term[HEAD_OF_NER] = entity_type
                 # Index the entity by its first word
                 first_word_id = entity_terms[0][ID]
                 self.entities_by_word[first_word_id].append(entity)
@@ -311,11 +311,10 @@ class NafAndTreeGraphBuilder(BaseGraphBuilder):
                 # Build the entity
                 label = self.label_pattern.format(form, "Gold")
                 mention = self.add_gold_mention(
-                    mention_id=self.id_pattern.format(entity_id, counter),
-                    entity_id=entity_id,
+                    node_id=self.id_pattern.format(entity_id, counter),
+                    gold_entity=entity_id,
                     label=label)
                 # Set the other attributes
-                mention[GOLD] = True
                 mention[SINGLETON] = singleton
                 mention[FORM] = form
                 mention[SPAN] = (
@@ -367,8 +366,8 @@ class NafAndTreeGraphBuilder(BaseGraphBuilder):
 
         # Sentence Root
         sentence_root_node = self.add_sentence(
-            root_index=root_index, sentence_form="",
-            sentence_label=sentence_label, sentence_id=sentence_id)
+            root_index=root_index, form="",
+            label=sentence_label, node_id=sentence_id)
 
         sentence_root_node[SENTENCE] = self.sentence_order
         sentence_root_node[TAG] = self.root_tag
@@ -625,7 +624,7 @@ class NafAndTreeGraphBuilder(BaseGraphBuilder):
                 constituent = self.add_constituent(
                     node_id=constituent_id, sentence=syntactic_root, tag=tag,
                     order=order, label=tag)
-                constituent[NER] = None
+                # constituent[NER] = None
                 constituents_by_id[constituent_id] = constituent
         return constituents_by_id, root
 
@@ -639,6 +638,8 @@ class NafAndTreeGraphBuilder(BaseGraphBuilder):
         """
         # Convert the syntactic tree
         if type(sentence) is str:
+            logging.warning("Using TreeBank syntax processor This is  not recomended this code is discontinued."
+                            "you have ven warned")
             # Is a plain Penn-tree
             sentence = self.clean_penn_tree(sentence)
             syntactic_tree = tree.Tree(sentence)
