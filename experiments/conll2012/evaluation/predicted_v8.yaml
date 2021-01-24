@@ -1,0 +1,5 @@
+extractor_options: [probabilistic_gender]
+writer: CONLL
+evaluation_script: ../resources/conll-scorer/v8.01/go_cut_path.sh
+metrics: [muc, bcub, ceafe, blanc]
+aggregation_metrics: [muc, bcub, ceafe]

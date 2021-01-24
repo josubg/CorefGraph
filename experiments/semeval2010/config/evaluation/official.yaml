@@ -2,4 +2,3 @@ writer: semeval
 evaluation_script: ../../semeval2010/scorer/official/go.sh
 metrics: [muc, bcub, ceafm, blanc]
 aggregation_metrics: [muc, bcub, ceafm]
-result: Official

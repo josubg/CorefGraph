@@ -3,11 +3,12 @@ extension: naf_stanford_sem
 evaluate: True
 report: True
 jobs: 15
-series_name: "conll 2012 test"
+series_name: "conll 2012 key"
 # Common config for all experiments
 common:
     - experiments/conll2012/evaluation/predicted_v8.yaml
-    - experiments/conll2012/corpus/test.yaml
+    - experiments/conll2012/corpus/key.yaml
+    - experiments/common/evaluation/meta.yaml
     - experiments/common/extractors/candidate_df.yaml
     - experiments/common/extractors/mention_bf.yaml
     - experiments/common/catchers/pack_classic.yaml

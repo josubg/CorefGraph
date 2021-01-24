@@ -1,6 +1,0 @@
-treebank_extension: .pt_sem
-writer: CONLL
-evaluation_script: ../resources/conll-scorer/v8.01/go.sh
-metrics: [muc, bcub, ceafe, blanc]
-aggregation_metrics: [muc, bcub, ceafe]
-result: default

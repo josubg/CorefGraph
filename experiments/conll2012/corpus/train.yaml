@@ -1,0 +1,6 @@
+language: en_conll
+reader: NAF
+writer: semevalCONLL
+gold: ../resources/conll2012/corpus/train/gold/
+speaker_extension: .spk
+treebank_extension: .pt_sem

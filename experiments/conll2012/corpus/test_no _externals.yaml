@@ -1,0 +1,4 @@
+language: en_conll
+reader: NAF
+writer: semevalCONLL
+gold: ../resources/conll2012/corpus/key/gold/

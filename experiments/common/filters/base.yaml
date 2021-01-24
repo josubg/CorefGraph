@@ -1,0 +1,1 @@
+mention_filters: [QuantityFilter, PleonasticFilter, DemonymFilter, InterjectionFilter, PartitiveFilter, BareNPFilter, QuantifierFilter, InvalidWordFilter, NonWordFilter, ConllSameHeadFilter]

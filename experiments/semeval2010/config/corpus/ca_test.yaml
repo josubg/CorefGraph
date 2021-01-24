@@ -1,5 +1,5 @@
 language: ca
-writer: semevalCONLL
 reader: NAF
+writer: semevalCONLL
 gold: ../resources/semeval2010/corpora/flat
 gold_ext: ca_test_auto.conll

@@ -1,0 +1,6 @@
+extractor_options: [probabilistic_gender]
+#treebank_extension: .pt_sem
+writer: CONLL
+evaluation_script: ../resources/semeval2010/scorer/official/go.sh
+metrics: [muc, bcub, ceafe, blanc]
+aggregation_metrics: [muc, bcub, ceafe]

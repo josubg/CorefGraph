@@ -1,6 +1,0 @@
-gold: ../resources/conll2012/corpus/key/gold/
-language: en_conll
-reader: NAF
-speaker_extension: .spk
-#treebank_extension: .pt_sem
-result: test
